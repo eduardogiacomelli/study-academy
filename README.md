@@ -1,6 +1,6 @@
 # 🎓 OS & DB Academy
 
-> **Plataforma educacional interativa para estudo de Sistemas Operacionais e Bancos de Dados**
+> **Plataforma educacional interativa para estudo de Sistemas Operacionais**
 
 Uma aplicação web moderna e gamificada com simuladores interativos, visualizadores 3D e sistema completo de exercícios para aprendizado de conceitos de Sistemas Operacionais, focando em Gerenciamento de Memória.
 
@@ -124,8 +124,7 @@ os-db-academy/
 ### Baseado em Referências de Qualidade
 - **Tanenbaum** - Sistemas Operacionais Modernos (Cap. 3 completo)
 - **Silberschatz** - Fundamentos de SO (Cap. 9)
-- **INE5611** - Lista de exercícios oficial (UFSC)
-- Exemplos e fórmulas **validados academicamente**
+- **INE5611** - Lista de exercícios (UFSC)
 
 ### Tópicos Cobertos
 - ✅ Conceitos Básicos de Memória
@@ -251,6 +250,7 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 - **UFSC** - Universidade Federal de Santa Catarina
 - **INE5611** - Disciplina de Sistemas Operacionais
 - **Prof. Eduardo Camilo Inacio** - Materiais de referência
+- **Prof. Cristian Koliver / Cristina Meinhardt** - Excelentes aulas expositivas.
 - **Tanenbaum** - "Sistemas Operacionais Modernos"
 - **Comunidade Open Source** - Por todas as bibliotecas incríveis
 
@@ -264,7 +264,7 @@ Se este projeto te ajudou nos estudos, considere dar uma ⭐ no repositório!
 
 <div align="center">
 
-**Desenvolvido com ❤️ para estudantes de Ciência da Computação**
+**Desenvolvido para estudantes e professores de Ciência da Computação e Sistemas de Informação**
 
 [🚀 Deploy](https://study-academy.vercel.app) · [📚 Docs](https://github.com/eduardogiacomelli/study-academy/wiki) · [🐛 Report Bug](https://github.com/eduardogiacomelli/study-academy/issues) · [✨ Request Feature](https://github.com/eduardogiacomelli/study-academy/issues)
 
