@@ -133,7 +133,7 @@ void lru_access(LRU* lru, int page) {
     int victim_idx = lru_find_victim(lru);
     printf("   LRU vítima: quadro %d (página %d, último acesso: %d)\\n",
            victim_idx,
-           lru->frames[victim_idx],
+           lru->frames[victim_idx],<div className="space-y-8">
            lru->last_access[victim_idx]);
     
     // Substitui
@@ -345,6 +345,9 @@ void compare_all_algorithms() {
 
 export default function SubstituicaoPage() {
   return (
+    <div className="min-h-screen bg-background">
+    <div className="container mx-auto px-6 py-6">
+      <div className="max-w-6xl mx-auto space-y-8">
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -718,6 +721,9 @@ export default function SubstituicaoPage() {
         </CardContent>
       </Card>
     </motion.div>
+    </div>
+    </div>
+    </div>
   );
 }
 

@@ -27,8 +27,9 @@ export default function PaginacaoPage() {
   const [activeTab, setActiveTab] = useState("teoria");
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-6 py-6">
+<div className="min-h-screen bg-background">
+    <div className="container mx-auto px-6 py-6">
+      <div className="max-w-6xl mx-auto space-y-8">      <div className="container mx-auto px-6 py-6">
         <div className="max-w-6xl mx-auto space-y-8">
       {/* Header */}
       <motion.div
@@ -637,6 +638,8 @@ int main() {
       </div>
         </div>
       </div>
+    </div>
+    </div>
     </div>
   );
 }

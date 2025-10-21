@@ -238,6 +238,9 @@ void example_eat() {
 
 export default function VirtualMemoryPage() {
   return (
+    <div className="min-h-screen bg-background">
+    <div className="container mx-auto px-6 py-6">
+      <div className="max-w-6xl mx-auto space-y-8">
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -602,6 +605,9 @@ export default function VirtualMemoryPage() {
         </CardContent>
       </Card>
     </motion.div>
+    </div>
+    </div>
+    </div>
   );
 }
 
