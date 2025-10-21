@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SmoothScroll } from "@/components/shared/SmoothScroll";
 import { GlobalLoading } from "@/components/shared/GlobalLoading";
+import { CollapsibleNav } from "@/components/shared/CollapsibleNav";
 import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -29,6 +30,7 @@ export default function RootLayout({
         >
           <SmoothScroll />
           <GlobalLoading />
+          <CollapsibleNav />
           {children}
           <Toaster position="bottom-right" richColors />
         </ThemeProvider>

@@ -21,7 +21,7 @@ export interface Exercise {
   explanation: string;
   hint?: string;
   points: number;
-  timeEstimate?: number; // em minutos
+  timeEstimate?: number;
 }
 
 interface ExerciseCardProps {
@@ -81,63 +81,58 @@ export function ExerciseCard({ exercise, index, onAnswer, isAnswered = false }: 
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05 }}
+      transition={{ delay: index * 0.03, duration: 0.3 }}
       className="group"
     >
-      <Card className={`overflow-hidden border-2 transition-all duration-300 hover:shadow-2xl hover:shadow-os-primary/20 ${
+      <Card className={`overflow-hidden border transition-all duration-200 hover:shadow-lg ${
         isSubmitted
           ? isCorrect
-            ? "border-green-500/50 bg-green-500/5"
-            : "border-red-500/50 bg-red-500/5"
-          : "border-border hover:border-os-primary/50"
+            ? "border-green-500/40 bg-green-500/5"
+            : "border-red-500/40 bg-red-500/5"
+          : "border-border hover:border-os-primary/40"
       }`}>
-        {/* Header */}
-        <div className={`p-4 bg-gradient-to-r ${config.color} relative overflow-hidden`}>
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
-          </div>
+        {/* Compact Header */}
+        <div className={`p-3 bg-gradient-to-r ${config.color} relative`}>
+          <div className="absolute inset-0 bg-black/10" />
           
-          <div className="relative z-10 flex items-start justify-between gap-4">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-2">
-                <Badge variant="secondary" className="bg-white/20 text-white border-white/30 text-xs">
+          <div className="relative z-10 flex items-center justify-between gap-3">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1 flex-wrap">
+                <Badge variant="secondary" className="bg-white/20 text-white border-white/20 text-[10px] px-2 py-0">
                   {exercise.category}
                 </Badge>
-                <Badge variant="secondary" className="bg-white/20 text-white border-white/30 text-xs">
+                <Badge variant="secondary" className="bg-white/20 text-white border-white/20 text-[10px] px-2 py-0">
                   {config.label}
                 </Badge>
                 {exercise.timeEstimate && (
-                  <Badge variant="secondary" className="bg-white/20 text-white border-white/30 text-xs flex items-center gap-1">
-                    <Clock className="size-3" />
-                    {exercise.timeEstimate} min
+                  <Badge variant="secondary" className="bg-white/20 text-white border-white/20 text-[10px] px-2 py-0 flex items-center gap-1">
+                    <Clock className="size-2.5" />
+                    {exercise.timeEstimate}min
                   </Badge>
                 )}
               </div>
-              <h3 className="text-lg font-bold text-white">
+              <h3 className="text-sm font-bold text-white truncate">
                 #{index + 1} - {exercise.title}
               </h3>
-              {exercise.description && (
-                <p className="text-sm text-white/80 mt-1">{exercise.description}</p>
-              )}
             </div>
             
-            <div className="flex flex-col items-end gap-2">
-              <Badge className="bg-white text-gray-900 font-bold px-3 py-1">
+            <div className="flex items-center gap-2">
+              <Badge className="bg-white text-gray-900 font-bold text-xs px-2 py-1">
                 <Trophy className="size-3 mr-1" />
-                {exercise.points} pts
+                {exercise.points}
               </Badge>
               {isSubmitted && (
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 500 }}
+                  transition={{ type: "spring", stiffness: 400 }}
                 >
                   {isCorrect ? (
-                    <CheckCircle2 className="size-8 text-green-400" />
+                    <CheckCircle2 className="size-6 text-green-400" />
                   ) : (
-                    <XCircle className="size-8 text-red-400" />
+                    <XCircle className="size-6 text-red-400" />
                   )}
                 </motion.div>
               )}
@@ -145,11 +140,11 @@ export function ExerciseCard({ exercise, index, onAnswer, isAnswered = false }: 
           </div>
         </div>
 
-        {/* Content */}
-        <div className="p-6 space-y-6">
+        {/* Content - Compact */}
+        <div className="p-4 space-y-4">
           {/* Question */}
-          <div className="space-y-4">
-            <p className="text-lg font-medium text-foreground leading-relaxed">
+          <div className="space-y-3">
+            <p className="text-sm font-medium text-foreground leading-relaxed">
               {exercise.question}
             </p>
 
@@ -160,9 +155,9 @@ export function ExerciseCard({ exercise, index, onAnswer, isAnswered = false }: 
                   variant="ghost"
                   size="sm"
                   onClick={() => setShowHint(!showHint)}
-                  className="text-yellow-500 hover:text-yellow-400"
+                  className="text-yellow-500 hover:text-yellow-400 h-7 text-xs"
                 >
-                  <Lightbulb className="size-4 mr-2" />
+                  <Lightbulb className="size-3 mr-1" />
                   {showHint ? "Ocultar Dica" : "Ver Dica"}
                 </Button>
                 <AnimatePresence>
@@ -171,9 +166,9 @@ export function ExerciseCard({ exercise, index, onAnswer, isAnswered = false }: 
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
-                      className="mt-3 p-4 bg-yellow-500/10 border-l-4 border-yellow-500 rounded"
+                      className="mt-2 p-3 bg-yellow-500/10 border-l-2 border-yellow-500 rounded text-xs text-yellow-300"
                     >
-                      <p className="text-sm text-yellow-300">💡 {exercise.hint}</p>
+                      💡 {exercise.hint}
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -181,10 +176,10 @@ export function ExerciseCard({ exercise, index, onAnswer, isAnswered = false }: 
             )}
           </div>
 
-          {/* Answer Options */}
-          <div className="space-y-3">
+          {/* Answer Options - Compact */}
+          <div className="space-y-2">
             {exercise.type === "multiple_choice" && exercise.options && (
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {exercise.options.map((option, idx) => {
                   const isSelected = selectedAnswer === option;
                   const isThisCorrect = showResult && option === exercise.correctAnswer;
@@ -195,29 +190,29 @@ export function ExerciseCard({ exercise, index, onAnswer, isAnswered = false }: 
                       key={idx}
                       onClick={() => !isSubmitted && setSelectedAnswer(option)}
                       disabled={isSubmitted}
-                      whileHover={!isSubmitted ? { scale: 1.01, x: 4 } : {}}
-                      whileTap={!isSubmitted ? { scale: 0.99 } : {}}
-                      className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-200 ${
+                      whileHover={!isSubmitted ? { scale: 1.005, x: 2 } : {}}
+                      whileTap={!isSubmitted ? { scale: 0.998 } : {}}
+                      className={`w-full text-left p-3 rounded-lg border transition-all duration-150 text-sm ${
                         isThisCorrect
-                          ? "bg-green-500/20 border-green-500 shadow-lg shadow-green-500/20"
+                          ? "bg-green-500/20 border-green-500 shadow"
                           : isThisWrong
-                          ? "bg-red-500/20 border-red-500 shadow-lg shadow-red-500/20"
+                          ? "bg-red-500/20 border-red-500 shadow"
                           : isSelected
-                          ? "bg-os-primary/20 border-os-primary shadow-lg shadow-os-primary/20"
-                          : "bg-card border-border hover:border-os-primary/50 hover:bg-os-primary/5"
+                          ? "bg-os-primary/20 border-os-primary shadow"
+                          : "bg-card border-border hover:border-os-primary/40 hover:bg-os-primary/5"
                       } ${isSubmitted ? "cursor-not-allowed" : "cursor-pointer"}`}
                     >
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                        <div className="flex items-center gap-2">
+                          <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
                             isSelected ? "border-os-primary bg-os-primary" : "border-muted-foreground"
                           }`}>
-                            {isSelected && <div className="w-3 h-3 bg-white rounded-full" />}
+                            {isSelected && <div className="w-2 h-2 bg-white rounded-full" />}
                           </div>
-                          <span className="text-sm font-medium">{option}</span>
+                          <span>{option}</span>
                         </div>
-                        {isThisCorrect && <CheckCircle2 className="size-5 text-green-500" />}
-                        {isThisWrong && <XCircle className="size-5 text-red-500" />}
+                        {isThisCorrect && <CheckCircle2 className="size-4 text-green-500" />}
+                        {isThisWrong && <XCircle className="size-4 text-red-500" />}
                       </div>
                     </motion.button>
                   );
@@ -226,16 +221,17 @@ export function ExerciseCard({ exercise, index, onAnswer, isAnswered = false }: 
             )}
 
             {(exercise.type === "calculation" || exercise.type === "true_false") && (
-              <div className="space-y-2">
+              <div>
                 {exercise.type === "true_false" ? (
-                  <div className="flex gap-3">
+                  <div className="flex gap-2">
                     {["Verdadeiro", "Falso"].map((option) => (
                       <Button
                         key={option}
                         onClick={() => !isSubmitted && setSelectedAnswer(option)}
                         disabled={isSubmitted}
                         variant={selectedAnswer === option ? "default" : "outline"}
-                        className={`flex-1 ${
+                        size="sm"
+                        className={`flex-1 text-sm ${
                           showResult && option === exercise.correctAnswer
                             ? "bg-green-500 hover:bg-green-600"
                             : showResult && selectedAnswer === option && option !== exercise.correctAnswer
@@ -253,7 +249,7 @@ export function ExerciseCard({ exercise, index, onAnswer, isAnswered = false }: 
                     onChange={(e) => !isSubmitted && setSelectedAnswer(e.target.value)}
                     placeholder="Digite sua resposta"
                     disabled={isSubmitted}
-                    className={`font-mono text-lg ${
+                    className={`text-sm font-mono ${
                       showResult
                         ? isCorrect
                           ? "border-green-500 bg-green-500/10"
@@ -266,43 +262,42 @@ export function ExerciseCard({ exercise, index, onAnswer, isAnswered = false }: 
             )}
           </div>
 
-          {/* Submit Button */}
+          {/* Submit Button - Compact */}
           {!isSubmitted && (
             <Button
               onClick={checkAnswer}
               disabled={!selectedAnswer || isSubmitted}
-              className="w-full gradient-os text-white font-semibold py-6 text-lg"
-              size="lg"
+              className="w-full gradient-os text-white font-semibold py-5 text-sm"
             >
               Verificar Resposta
             </Button>
           )}
 
-          {/* Result & Explanation */}
+          {/* Result & Explanation - Compact */}
           <AnimatePresence>
             {showResult && (
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                className={`p-6 rounded-xl border-2 ${
+                exit={{ opacity: 0, y: 5 }}
+                className={`p-4 rounded-lg border ${
                   isCorrect
-                    ? "bg-green-500/10 border-green-500/50"
-                    : "bg-red-500/10 border-red-500/50"
+                    ? "bg-green-500/10 border-green-500/40"
+                    : "bg-red-500/10 border-red-500/40"
                 }`}
               >
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-2">
                   {isCorrect ? (
-                    <CheckCircle2 className="size-6 text-green-500 flex-shrink-0 mt-0.5" />
+                    <CheckCircle2 className="size-5 text-green-500 flex-shrink-0 mt-0.5" />
                   ) : (
-                    <XCircle className="size-6 text-red-500 flex-shrink-0 mt-0.5" />
+                    <XCircle className="size-5 text-red-500 flex-shrink-0 mt-0.5" />
                   )}
-                  <div className="flex-1 space-y-3">
-                    <p className={`font-bold text-lg ${isCorrect ? "text-green-400" : "text-red-400"}`}>
+                  <div className="flex-1 space-y-2 text-sm">
+                    <p className={`font-bold ${isCorrect ? "text-green-400" : "text-red-400"}`}>
                       {isCorrect ? "🎉 Correto!" : "❌ Incorreto"}
                     </p>
                     {!isCorrect && (
-                      <p className="text-sm">
+                      <p className="text-xs">
                         <strong>Resposta correta:</strong>{" "}
                         <span className="font-mono text-green-400">
                           {Array.isArray(exercise.correctAnswer) 
@@ -311,9 +306,9 @@ export function ExerciseCard({ exercise, index, onAnswer, isAnswered = false }: 
                         </span>
                       </p>
                     )}
-                    <div className="pt-2 border-t border-border/50">
-                      <p className="text-sm font-semibold text-foreground mb-2">📚 Explicação:</p>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
+                    <div className="pt-2 border-t border-border/30">
+                      <p className="text-xs font-semibold text-foreground mb-1">📚 Explicação:</p>
+                      <p className="text-xs text-muted-foreground leading-relaxed">
                         {exercise.explanation}
                       </p>
                     </div>
@@ -327,4 +322,3 @@ export function ExerciseCard({ exercise, index, onAnswer, isAnswered = false }: 
     </motion.div>
   );
 }
-

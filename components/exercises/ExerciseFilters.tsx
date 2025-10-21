@@ -39,60 +39,58 @@ export function ExerciseFilters({
   const hasActiveFilters = selectedCategory !== "all" || selectedDifficulty !== "all";
 
   return (
-    <Card className="p-6 bg-gradient-to-br from-os-primary/5 to-os-secondary/5 border-os-primary/20">
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <Filter className="size-5 text-os-primary" />
-          <h3 className="text-lg font-bold">Filtros</h3>
+    <Card className="p-4 bg-gradient-to-br from-os-primary/5 to-os-secondary/5 border-os-primary/20">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <Filter className="size-4 text-os-primary" />
+          <h3 className="text-sm font-bold">Filtros</h3>
         </div>
         {hasActiveFilters && (
           <Button
             variant="ghost"
             size="sm"
             onClick={onClearFilters}
-            className="text-muted-foreground hover:text-foreground"
+            className="h-7 text-xs text-muted-foreground hover:text-foreground"
           >
-            <X className="size-4 mr-2" />
+            <X className="size-3 mr-1" />
             Limpar
           </Button>
         )}
       </div>
 
-      <div className="space-y-6">
-        {/* Categories */}
-        <div className="space-y-3">
-          <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+      <div className="space-y-4">
+        {/* Categories - Compact */}
+        <div className="space-y-2">
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
             Categoria
           </p>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             {categories.map((category) => {
               const isActive = selectedCategory === category.value;
               return (
                 <motion.button
                   key={category.value}
                   onClick={() => onCategoryChange(category.value)}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`group relative px-4 py-2.5 rounded-xl border-2 transition-all duration-200 ${
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  className={`px-2.5 py-1.5 rounded-lg border transition-all duration-150 text-xs ${
                     isActive
-                      ? "bg-os-primary border-os-primary text-white shadow-lg shadow-os-primary/30"
-                      : "bg-card border-border hover:border-os-primary/50 hover:bg-os-primary/10"
+                      ? "bg-os-primary border-os-primary text-white shadow-md shadow-os-primary/20"
+                      : "bg-card border-border hover:border-os-primary/40 hover:bg-os-primary/5"
                   }`}
                 >
-                  <div className="flex items-center gap-2">
-                    {category.icon && <span className="text-lg">{category.icon}</span>}
-                    <span className="font-medium text-sm">{category.label}</span>
+                  <div className="flex items-center gap-1.5">
+                    {category.icon && <span className="text-sm">{category.icon}</span>}
+                    <span className="font-medium">{category.label}</span>
                     <Badge
                       variant="secondary"
-                      className={`text-xs ${
+                      className={`text-[9px] px-1.5 py-0 ${
                         isActive ? "bg-white/20 text-white" : "bg-muted"
                       }`}
                     >
                       {category.count}
                     </Badge>
-                    {isActive && (
-                      <CheckCircle2 className="size-4 ml-1" />
-                    )}
+                    {isActive && <CheckCircle2 className="size-3" />}
                   </div>
                 </motion.button>
               );
@@ -100,12 +98,12 @@ export function ExerciseFilters({
           </div>
         </div>
 
-        {/* Difficulties */}
-        <div className="space-y-3">
-          <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+        {/* Difficulties - Compact */}
+        <div className="space-y-2">
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
             Dificuldade
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 gap-1.5">
             {difficulties.map((difficulty) => {
               const isActive = selectedDifficulty === difficulty.value;
               const colorClass = 
@@ -118,26 +116,26 @@ export function ExerciseFilters({
                 <motion.button
                   key={difficulty.value}
                   onClick={() => onDifficultyChange(difficulty.value)}
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  className={`relative px-4 py-3 rounded-xl border-2 transition-all duration-200 overflow-hidden ${
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`relative px-2.5 py-2 rounded-lg border transition-all duration-150 overflow-hidden ${
                     isActive
-                      ? "border-transparent shadow-lg"
+                      ? "border-transparent shadow-md"
                       : "bg-card border-border hover:border-os-primary/30"
                   }`}
                 >
                   {isActive && (
-                    <div className={`absolute inset-0 bg-gradient-to-r ${colorClass} opacity-20`} />
+                    <div className={`absolute inset-0 bg-gradient-to-r ${colorClass} opacity-15`} />
                   )}
-                  <div className="relative flex flex-col items-center gap-1">
-                    <span className={`font-semibold text-sm ${
+                  <div className="relative flex flex-col items-center gap-0.5">
+                    <span className={`font-semibold text-xs ${
                       isActive ? "text-foreground" : "text-muted-foreground"
                     }`}>
                       {difficulty.label}
                     </span>
                     <Badge
                       variant="secondary"
-                      className={`text-xs ${isActive ? "bg-background/50" : "bg-muted"}`}
+                      className={`text-[9px] px-1.5 py-0 ${isActive ? "bg-background/50" : "bg-muted"}`}
                     >
                       {difficulty.count}
                     </Badge>
@@ -148,15 +146,14 @@ export function ExerciseFilters({
           </div>
         </div>
 
-        {/* Results Count */}
-        <div className="pt-4 border-t border-border/50">
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-muted-foreground">
-              Mostrando <span className="font-bold text-foreground">{filteredCount}</span> de{" "}
-              <span className="font-bold text-foreground">{totalExercises}</span> exercícios
-            </p>
+        {/* Results Count - Compact */}
+        <div className="pt-3 border-t border-border/50">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-muted-foreground">
+              <strong className="text-foreground">{filteredCount}</strong> de {totalExercises}
+            </span>
             {filteredCount < totalExercises && (
-              <Badge variant="outline" className="bg-os-primary/10 border-os-primary/30">
+              <Badge variant="outline" className="bg-os-primary/10 border-os-primary/30 text-[9px]">
                 Filtrado
               </Badge>
             )}
@@ -166,4 +163,3 @@ export function ExerciseFilters({
     </Card>
   );
 }
-

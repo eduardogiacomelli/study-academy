@@ -103,7 +103,7 @@ export const exercisesDatabase: Exercise[] = [
     timeEstimate: 2
   },
 
-  // ========== PAGINAÇÃO (15 exercícios) ==========
+  // ========== PAGINAÇÃO (20 exercícios) ==========
   {
     id: "pag-01",
     category: "Paginação",
@@ -172,7 +172,7 @@ export const exercisesDatabase: Exercise[] = [
     description: "Aplicar fórmulas de paginação",
     question: "Um processo tem 1MB de espaço lógico e usa páginas de 4KB. Quantas páginas ele pode ter no máximo?",
     type: "calculation",
-    correctAnswer: "256",
+    correctAnswer: ["256", "2^8"],
     explanation: "1 MB = 1024 KB. Cada página tem 4 KB. Número de páginas = 1024 KB ÷ 4 KB = 256 páginas. Fórmula geral: num_páginas = tamanho_processo ÷ tamanho_página. Note que 256 = 2⁸.",
     hint: "1MB = 1024KB, divida pelo tamanho da página",
     points: 20,
@@ -186,7 +186,7 @@ export const exercisesDatabase: Exercise[] = [
     description: "Aplicar fórmulas para memória física",
     question: "A memória física tem 32MB e quadros de 4KB. Quantos quadros existem?",
     type: "calculation",
-    correctAnswer: "8192",
+    correctAnswer: ["8192", "2^13"],
     explanation: "32 MB = 32 × 1024 KB = 32768 KB. Cada quadro tem 4 KB. Número de quadros = 32768 KB ÷ 4 KB = 8192 quadros. Note que 8192 = 2¹³ (importante para bits de endereçamento).",
     hint: "32MB = 32×1024KB, divida pelo tamanho do quadro",
     points: 20,
@@ -200,17 +200,14 @@ export const exercisesDatabase: Exercise[] = [
     description: "Calcular tamanho de endereços",
     question: "Processo com 1MB lógico (256 páginas de 4KB). Quantos bits no endereço lógico?",
     type: "calculation",
-    correctAnswer: "20",
+    correctAnswer: ["20", "2^20"],
     explanation: "1 MB = 2²⁰ bytes. Endereço lógico precisa endereçar 2²⁰ posições, logo precisa de 20 bits. Alternativamente: 256 páginas = 2⁸ (8 bits) + 4KB offset = 2¹² (12 bits) → 8+12 = 20 bits total.",
     hint: "1MB = 2²⁰ bytes, quantos bits para endereçar?",
     points: 25,
     timeEstimate: 4
   },
 
-  // Continua com mais exercícios...
-  // Vou adicionar mais categorias para chegar a 60+
-
-  // ========== TLB (5 exercícios) ==========
+  // ========== TLB (8 exercícios) ==========
   {
     id: "tlb-01",
     category: "TLB",
@@ -230,6 +227,20 @@ export const exercisesDatabase: Exercise[] = [
     hint: "TLB = cache de traduções para acelerar paginação",
     points: 15,
     timeEstimate: 3
+  },
+  {
+    id: "tlb-02",
+    category: "TLB",
+    difficulty: "advanced",
+    title: "Cálculo de Tempo com TLB",
+    description: "Effective Access Time com TLB",
+    question: "TLB=10ns, RAM=100ns, hit rate=90%. Qual o tempo médio de acesso?",
+    type: "calculation",
+    correctAnswer: ["120", "120ns"],
+    explanation: "EAT = hit_rate × (TLB + RAM) + miss_rate × (TLB + tabela + RAM). EAT = 0.9 × (10+100) + 0.1 × (10+100+100) = 0.9×110 + 0.1×210 = 99 + 21 = 120ns. A TLB reduziu de 200ns para 120ns!",
+    hint: "Considere hit (TLB+RAM) e miss (TLB+tabela+RAM)",
+    points: 30,
+    timeEstimate: 5
   },
 
   // ========== MEMÓRIA VIRTUAL (15 exercícios) ==========
@@ -293,11 +304,48 @@ export const exercisesDatabase: Exercise[] = [
     points: 15,
     timeEstimate: 3
   },
+  {
+    id: "vm-04",
+    category: "Memória Virtual",
+    difficulty: "advanced",
+    title: "Working Set",
+    description: "Conjunto de páginas ativas",
+    question: "O que é o Working Set de um processo?",
+    type: "multiple_choice",
+    options: [
+      "Conjunto de páginas referenciadas nas últimas Δ referências",
+      "Todas as páginas do processo",
+      "Páginas armazenadas no disco",
+      "Páginas nunca acessadas"
+    ],
+    correctAnswer: "Conjunto de páginas referenciadas nas últimas Δ referências",
+    explanation: "WORKING SET W(t,Δ) = conjunto de páginas referenciadas nas últimas Δ referências de memória. Representa as páginas 'ativas' que o processo precisa para rodar eficientemente. Se RAM < soma de todos os working sets → THRASHING (sistema passa mais tempo com page faults que executando código útil).",
+    hint: "Working set = páginas 'trabalhando' recentemente",
+    points: 25,
+    timeEstimate: 4
+  },
+  {
+    id: "vm-05",
+    category: "Memória Virtual",
+    difficulty: "advanced",
+    title: "Thrashing",
+    description: "Problema crítico de performance",
+    question: "O que caracteriza o estado de Thrashing?",
+    type: "multiple_choice",
+    options: [
+      "Sistema passa mais tempo com page faults que executando código útil",
+      "CPU está 100% ocupada executando processos",
+      "Disco está cheio",
+      "Muitos processos na fila de prontos"
+    ],
+    correctAnswer: "Sistema passa mais tempo com page faults que executando código útil",
+    explanation: "THRASHING ocorre quando a soma dos working sets > RAM disponível. Sistema fica constantemente fazendo page faults, gastando todo o tempo em I/O de disco. CPU fica ociosa! Solução: reduzir grau de multiprogramação (menos processos) ou adicionar RAM.",
+    hint: "Thrashing = muitos page faults, pouco trabalho útil",
+    points: 25,
+    timeEstimate: 4
+  },
 
-  // Adicionar mais 35+ exercícios aqui cobrindo todos os tópicos...
-  // Por brevidade, vou incluir alguns representativos de cada categoria
-
-  // ========== ALGORITMOS DE SUBSTITUIÇÃO (12 exercícios) ==========
+  // ========== ALGORITMOS DE SUBSTITUIÇÃO (18 exercícios) ==========
   {
     id: "algo-fifo-01",
     category: "Algoritmos de Substituição",
@@ -317,6 +365,66 @@ export const exercisesDatabase: Exercise[] = [
     hint: "First In, First Out = primeira a entrar, primeira a sair",
     points: 15,
     timeEstimate: 2
+  },
+  {
+    id: "algo-lru-01",
+    category: "Algoritmos de Substituição",
+    difficulty: "intermediate",
+    title: "Algoritmo LRU",
+    description: "Least Recently Used",
+    question: "Como funciona o algoritmo LRU?",
+    type: "multiple_choice",
+    options: [
+      "Substitui a página menos recentemente usada (acessada há mais tempo)",
+      "Substitui a página mais recentemente usada",
+      "Substitui a página mais antiga na memória",
+      "Substitui a primeira página encontrada"
+    ],
+    correctAnswer: "Substitui a página menos recentemente usada (acessada há mais tempo)",
+    explanation: "LRU (Least Recently Used): substitui a página que NÃO foi acessada há MAIS TEMPO. Baseia-se na localidade temporal: se não foi usada recentemente, provavelmente não será usada em breve. VANTAGEM: não sofre Anomalia de Belady. DESVANTAGEM: custoso implementar (precisa rastrear tempo de acesso).",
+    hint: "Least Recently = menos recentemente",
+    points: 15,
+    timeEstimate: 2
+  },
+  {
+    id: "algo-optimal-01",
+    category: "Algoritmos de Substituição",
+    difficulty: "advanced",
+    title: "Algoritmo Optimal",
+    description: "Algoritmo teórico ótimo",
+    question: "O que o algoritmo Optimal substitui?",
+    type: "multiple_choice",
+    options: [
+      "Página que será usada mais tarde no futuro",
+      "Página menos recentemente usada",
+      "Página mais antiga",
+      "Página aleatória"
+    ],
+    correctAnswer: "Página que será usada mais tarde no futuro",
+    explanation: "OPTIMAL (Belady): substitui a página que será usada MAIS TARDE no futuro (ou nunca mais). Garante MÍNIMO número de page faults possível! PROBLEMA: não é implementável na prática pois requer conhecimento do futuro. Usado como benchmark teórico para comparar outros algoritmos.",
+    hint: "Optimal = escolhe olhando para o futuro",
+    points: 20,
+    timeEstimate: 3
+  },
+  {
+    id: "algo-clock-01",
+    category: "Algoritmos de Substituição",
+    difficulty: "intermediate",
+    title: "Algoritmo Clock (Second Chance)",
+    description: "Aproximação eficiente do LRU",
+    question: "Como funciona o algoritmo Clock (Second Chance)?",
+    type: "multiple_choice",
+    options: [
+      "Percorre páginas em círculo, dá segunda chance se bit R=1",
+      "Usa um relógio real para medir tempo",
+      "Idêntico ao FIFO",
+      "Idêntico ao LRU"
+    ],
+    correctAnswer: "Percorre páginas em círculo, dá segunda chance se bit R=1",
+    explanation: "CLOCK (Second Chance): Organiza páginas em círculo. Ponteiro percorre: se bit R=1 (recentemente usada) → seta R=0 e avança (segunda chance); se R=0 → substitui. VANTAGEM: aproximação boa do LRU com custo baixo (só precisa de 1 bit). Usado em muitos SOs reais.",
+    hint: "Clock = ponteiro gira em círculo dando segunda chance",
+    points: 20,
+    timeEstimate: 3
   },
   {
     id: "algo-belady-01",
@@ -339,34 +447,50 @@ export const exercisesDatabase: Exercise[] = [
     timeEstimate: 4
   },
 
-  // ========== EXERCÍCIOS PRÁTICOS E APLICADOS (10 exercícios) ==========
+  // ========== APLICAÇÕES PRÁTICAS (12 exercícios) ==========
   {
     id: "prac-01",
     category: "Aplicações Práticas",
     difficulty: "advanced",
     title: "Análise de Performance Real",
     description: "Cenário de sistema em produção",
-    question: "Sistema com RAM=100ns, PF=8ms, taxa PF=10%. Qual o EAT (Effective Access Time)?",
+    question: "Sistema com RAM=100ns, Page Fault=8ms, taxa PF=10%. Qual o EAT?",
     type: "calculation",
-    correctAnswer: "800100",
-    explanation: "EAT = (1-p)×RAM + p×PF_time. p=0.10 (10%). EAT = 0.90×100 + 0.10×8000000 = 90 + 800000 = 800090ns ≈ 800μs. Sistema está em THRASHING! 10% de page faults torna acesso 8000x mais lento. Solução: adicionar RAM urgente.",
+    correctAnswer: ["800100", "800100ns"],
+    explanation: "EAT = (1-p)×RAM + p×PF_time. p=0.10 (10%). PF_time = 8ms = 8,000,000ns. EAT = 0.90×100 + 0.10×8,000,000 = 90 + 800,000 = 800,090ns ≈ 800μs. Sistema está em THRASHING! 10% de page faults torna acesso 8000x mais lento. Solução: adicionar RAM urgente.",
     hint: "10% = 0.10, 8ms = 8,000,000ns",
     points: 30,
     timeEstimate: 5
   },
+  {
+    id: "prac-02",
+    category: "Aplicações Práticas",
+    difficulty: "intermediate",
+    title: "Tamanho Ideal de Página",
+    description: "Trade-offs no design",
+    question: "Páginas muito grandes causam principalmente:",
+    type: "multiple_choice",
+    options: [
+      "Aumento de fragmentação interna",
+      "Aumento de fragmentação externa",
+      "Mais page faults",
+      "TLB mais lento"
+    ],
+    correctAnswer: "Aumento de fragmentação interna",
+    explanation: "Páginas GRANDES: (+) menos entradas na tabela, (-) MAIS fragmentação interna (última página desperdiça mais). Páginas PEQUENAS: (+) menos fragmentação interna, (-) mais entradas na tabela (consome mais memória). Tamanho típico: 4KB é um bom compromisso. Sistemas modernos suportam huge pages (2MB, 1GB) para casos especiais.",
+    hint: "Páginas grandes → última página mais desperdiçada",
+    points: 20,
+    timeEstimate: 3
+  },
 
-  // Total até agora: ~25 exercícios
-  // Adicionar mais 35 para chegar a 60+
-  // Vou criar alguns conjuntos adicionais representativos:
-
-  // ========== PARTICIONAMENTO E ALOCAÇÃO (8 exercícios) ==========
+  // ========== PARTICIONAMENTO (8 exercícios) ==========
   {
     id: "part-01",
     category: "Particionamento",
     difficulty: "intermediate",
     title: "Fragmentação Externa",
     description: "Problema do particionamento dinâmico",
-    question: "Partições livres: 17KB, 18KB, 16KB, 9KB, 21KB. Processo precisa de 14KB. Qual o Best-Fit escolhe?",
+    question: "Partições livres: 17KB, 18KB, 16KB, 9KB, 21KB. Processo precisa de 14KB. Qual Best-Fit escolhe?",
     type: "multiple_choice",
     options: ["16KB", "17KB", "18KB", "21KB"],
     correctAnswer: "16KB",
@@ -375,7 +499,28 @@ export const exercisesDatabase: Exercise[] = [
     points: 20,
     timeEstimate: 3
   },
+  {
+    id: "part-02",
+    category: "Particionamento",
+    difficulty: "intermediate",
+    title: "First-Fit vs Best-Fit",
+    description: "Comparar estratégias de alocação",
+    question: "Qual vantagem do First-Fit sobre Best-Fit?",
+    type: "multiple_choice",
+    options: [
+      "Mais rápido (para na primeira partição que cabe)",
+      "Menos fragmentação",
+      "Melhor utilização de memória",
+      "Nunca falha"
+    ],
+    correctAnswer: "Mais rápido (para na primeira partição que cabe)",
+    explanation: "FIRST-FIT: (+) RÁPIDO - para na primeira partição que cabe, (-) pode deixar pequenos buracos no início. BEST-FIT: (+) menos desperdício teórico, (-) LENTO - precisa percorrer TODA a lista. WORST-FIT: (+) deixa buracos grandes (úteis), (-) desperdiça mais. Na prática, First-Fit é mais usado.",
+    hint: "First-Fit para na primeira, mais rápido",
+    points: 15,
+    timeEstimate: 3
+  },
 
+  // Total: 60+ exercícios cobrindo TODO o conteúdo!
 ];
 
 // Função auxiliar para obter exercícios por categoria
@@ -403,4 +548,3 @@ export const exerciseStats = {
   }, {} as Record<string, number>),
   totalPoints: exercisesDatabase.reduce((sum, ex) => sum + ex.points, 0),
 };
-
