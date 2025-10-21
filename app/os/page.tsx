@@ -1,335 +1,241 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import Link from "next/link";
-import { Cpu, HardDrive, Folder, Lock, GitFork, CheckCircle2, Clock, Trophy, Zap } from "lucide-react";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Brain,
+  FileText,
+  Layers,
+  HardDrive,
+  Repeat,
+  Zap,
+  ArrowRight,
+  BookOpen,
+  Trophy,
+  Sparkles,
+} from "lucide-react";
 
-const osSections = [
+const modules = [
   {
-    title: "Gerenciamento de Memória",
-    description: "Explore paginação, segmentação, memória virtual e algoritmos de substituição.",
-    icon: <HardDrive className="size-8" />,
+    title: "Paginação",
+    description: "Tradução de endereços, TLB e visualização 3D interativa",
+    icon: FileText,
     href: "/os/memoria/paginacao",
-    color: "from-cyan-500 to-blue-500",
-    progress: 100, // 4 de 4 seções completas
-    topics: ["Paginação", "Segmentação", "Virtual Memory", "Page Replacement"],
+    color: "from-blue-500 to-cyan-500",
+    bgColor: "bg-blue-500/10",
+    features: ["3 Simuladores", "Visualizador 3D TLB", "Cálculos práticos"],
     difficulty: "Intermediário",
-    duration: "~4 horas",
+    badge: "3D"
   },
   {
-    title: "Processos e Threads",
-    description: "Entenda como os processos são criados, gerenciados e como as threads funcionam.",
-    icon: <Cpu className="size-8" />,
-    href: "/os/processos",
-    color: "from-blue-500 to-indigo-500",
-    progress: 0,
-    topics: ["PCB", "Context Switch", "Multithreading", "IPC"],
-    difficulty: "Básico",
-    duration: "~3 horas",
-  },
-  {
-    title: "Sincronização e Concorrência",
-    description: "Aprenda sobre mutex, semáforos e problemas clássicos de concorrência.",
-    icon: <GitFork className="size-8" />,
-    href: "/os/sincronizacao",
-    color: "from-teal-500 to-green-500",
-    progress: 0,
-    topics: ["Mutex", "Semáforos", "Deadlock", "Race Conditions"],
-    difficulty: "Avançado",
-    duration: "~5 horas",
-  },
-  {
-    title: "Deadlock",
-    description: "Descubra as condições para deadlock e estratégias de prevenção/detecção.",
-    icon: <Lock className="size-8" />,
-    href: "/os/deadlock",
-    color: "from-red-500 to-pink-500",
-    progress: 0,
-    topics: ["Condições", "Prevenção", "Detecção", "Recuperação"],
-    difficulty: "Avançado",
-    duration: "~3 horas",
-  },
-  {
-    title: "Sistemas de Arquivos",
-    description: "Entenda FAT, i-nodes e como os arquivos são armazenados e organizados.",
-    icon: <Folder className="size-8" />,
-    href: "/os/arquivos",
-    color: "from-amber-500 to-orange-500",
-    progress: 0,
-    topics: ["FAT", "i-nodes", "Estruturas", "Fragmentação"],
+    title: "Segmentação",
+    description: "Tabelas de segmentos, alocação e proteção de memória",
+    icon: Layers,
+    href: "/os/memoria/segmentacao",
+    color: "from-purple-500 to-pink-500",
+    bgColor: "bg-purple-500/10",
+    features: ["Simulador completo", "Tabela de segmentos", "Proteção"],
     difficulty: "Intermediário",
-    duration: "~3 horas",
+  },
+  {
+    title: "Memória Virtual",
+    description: "Demand paging, page faults, working set e thrashing",
+    icon: HardDrive,
+    href: "/os/memoria/virtual",
+    color: "from-green-500 to-emerald-500",
+    bgColor: "bg-green-500/10",
+    features: ["6 Simuladores", "Working Set", "COW", "EAT"],
+    difficulty: "Avançado",
+    badge: "6"
+  },
+  {
+    title: "Substituição de Página",
+    description: "Algoritmos FIFO, LRU, Clock, Optimal e Anomalia de Belady",
+    icon: Repeat,
+    href: "/os/memoria/substituicao",
+    color: "from-orange-500 to-red-500",
+    bgColor: "bg-orange-500/10",
+    features: ["4 Algoritmos", "Comparador", "Belady"],
+    difficulty: "Avançado",
+    badge: "4"
+  },
+  {
+    title: "Exercícios",
+    description: "40+ questões gamificadas com sistema de pontuação",
+    icon: Zap,
+    href: "/os/exercicios",
+    color: "from-yellow-500 to-orange-500",
+    bgColor: "bg-yellow-500/10",
+    features: ["40+ Questões", "Sistema de pontos", "Progresso"],
+    difficulty: "Todos os níveis",
+    badge: "40+"
   },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    }
-  }
-};
+const stats = [
+  { label: "Simuladores", value: "12", icon: Brain },
+  { label: "Exercícios", value: "40+", icon: Trophy },
+  { label: "Visualizadores 3D", value: "3", icon: Sparkles },
+];
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
-    y: 0,
-    transition: {
-      type: "spring" as const,
-      stiffness: 100,
-    }
-  }
-};
-
-export default function OSDashboardPage() {
-  const totalProgress = Math.round(
-    osSections.reduce((acc, section) => acc + section.progress, 0) / osSections.length
-  );
-
+export default function OSPage() {
   return (
-    <div className="space-y-8">
-      {/* Hero Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-os-primary via-blue-600 to-os-secondary p-8 md:p-12 text-white"
-      >
-        <motion.div
-          className="absolute inset-0 opacity-10"
-          animate={{
-            backgroundPosition: ["0% 0%", "100% 100%"],
-          }}
-          transition={{ duration: 20, repeat: Infinity, repeatType: "reverse" }}
-          style={{
-            backgroundImage: "radial-gradient(circle, white 2px, transparent 2px)",
-            backgroundSize: "50px 50px",
-          }}
-        />
+    <div className="min-h-screen bg-background">
+      {/* Compact Hero */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-os-primary/90 via-cyan-600/90 to-os-secondary/90 border-b border-white/10">
+        <div className="absolute inset-0 bg-grid-white/[0.02]" />
         
-        <div className="relative z-10">
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", stiffness: 200, damping: 15 }}
-          >
-            <div className="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-6">
-              <Cpu className="size-10" />
-            </div>
-          </motion.div>
-          
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Bem-vindo à OS Academy!
-          </h1>
-          <p className="text-xl text-white/90 max-w-3xl mb-8">
-            Domine os fundamentos dos Sistemas Operacionais através de módulos interativos, 
-            simuladores visuais e exercícios práticos baseados em Tanenbaum e Silberschatz.
-          </p>
-
-          {/* Stats Row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-              <div className="flex items-center gap-2 mb-2">
-                <Trophy className="size-5 text-yellow-300" />
-                <span className="text-sm font-medium">Progresso Geral</span>
-              </div>
-              <div className="text-3xl font-bold">{totalProgress}%</div>
-              <Progress value={totalProgress} className="h-2 mt-2 bg-white/20" />
-            </div>
-            
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-              <div className="flex items-center gap-2 mb-2">
-                <CheckCircle2 className="size-5 text-green-300" />
-                <span className="text-sm font-medium">Módulos</span>
-              </div>
-              <div className="text-3xl font-bold">
-                {osSections.filter(s => s.progress === 100).length}/{osSections.length}
-              </div>
-            </div>
-            
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-              <div className="flex items-center gap-2 mb-2">
-                <Zap className="size-5 text-blue-300" />
-                <span className="text-sm font-medium">Simuladores</span>
-              </div>
-              <div className="text-3xl font-bold">6+</div>
-            </div>
-            
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-              <div className="flex items-center gap-2 mb-2">
-                <Clock className="size-5 text-purple-300" />
-                <span className="text-sm font-medium">Tempo Estimado</span>
-              </div>
-              <div className="text-3xl font-bold">20h</div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Modules Grid */}
-      <div>
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-3xl font-bold text-foreground">Módulos de Aprendizado</h2>
-            <p className="text-muted-foreground mt-1">Escolha um módulo para começar sua jornada</p>
-          </div>
-        </div>
-
-        <motion.div 
-          className="grid grid-cols-1 lg:grid-cols-2 gap-6"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {osSections.map((section, index) => (
+        <div className="relative container mx-auto px-6 py-8">
+          <div className="max-w-6xl mx-auto">
             <motion.div
-              key={section.title}
-              variants={itemVariants}
-              whileHover={{ y: -8, scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center space-y-4"
             >
-              <Link href={section.href}>
-                <Card className={`h-full group relative overflow-hidden transition-all duration-300 ${
-                  section.progress === 100 
-                    ? "border-2 border-green-500/50 bg-green-500/5" 
-                    : "border-2 border-border hover:border-os-primary/50"
-                } hover:shadow-xl hover:shadow-os-primary/10`}>
-                  {/* Animated gradient background */}
-                  <motion.div 
-                    className={`absolute inset-0 bg-gradient-to-br ${section.color} opacity-0 group-hover:opacity-10 transition-opacity`}
-                  />
-                  
-                  {section.progress === 100 && (
-                    <div className="absolute top-4 right-4 z-10">
-                      <Badge className="bg-green-500 text-white border-0">
-                        <CheckCircle2 className="size-3 mr-1" />
-                        Completo
-                      </Badge>
-                    </div>
-                  )}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-2">
+                <BookOpen className="size-4 text-white" />
+                <span className="text-xs font-medium text-white/90 uppercase tracking-wider">
+                  Sistemas Operacionais
+                </span>
+              </div>
+              
+              <h1 className="text-4xl md:text-5xl font-bold text-white">
+                Gerenciamento de Memória
+              </h1>
+              
+              <p className="text-base text-white/80 max-w-2xl mx-auto">
+                Aprenda conceitos fundamentais através de simuladores interativos e exercícios práticos
+              </p>
 
-                  <CardHeader>
-                    <div className="flex items-start gap-4">
-                      <motion.div 
-                        className={`p-4 rounded-2xl bg-gradient-to-br ${section.color} text-white shadow-lg shrink-0`}
-                        whileHover={{ rotate: [0, -5, 5, -5, 0], scale: 1.1 }}
-                        transition={{ duration: 0.5 }}
-                      >
-                        {section.icon}
-                      </motion.div>
-                      <div className="flex-1 min-w-0">
-                        <CardTitle className="text-2xl mb-2 group-hover:text-os-primary transition-colors">
-                          {section.title}
-                        </CardTitle>
-                        <CardDescription className="text-base">
-                          {section.description}
-                        </CardDescription>
+              {/* Stats - Compact */}
+              <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+                {stats.map((stat) => {
+                  const Icon = stat.icon;
+                  return (
+                    <div
+                      key={stat.label}
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 backdrop-blur-sm"
+                    >
+                      <Icon className="size-4 text-white" />
+                      <div className="text-left">
+                        <div className="text-xs text-white/70">{stat.label}</div>
+                        <div className="text-lg font-bold text-white">{stat.value}</div>
                       </div>
                     </div>
-                  </CardHeader>
-
-                  <CardContent className="space-y-4">
-                    {/* Topics */}
-                    <div className="flex flex-wrap gap-2">
-                      {section.topics.map((topic) => (
-                        <Badge 
-                          key={topic} 
-                          variant="secondary" 
-                          className="bg-background/50 hover:bg-os-primary/20 transition-colors"
-                        >
-                          {topic}
-                        </Badge>
-                      ))}
-                    </div>
-
-                    {/* Meta info */}
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground pt-2">
-                      <div className="flex items-center gap-1">
-                        <Clock className="size-4" />
-                        <span>{section.duration}</span>
-                      </div>
-                      <Badge 
-                        variant="outline" 
-                        className={
-                          section.difficulty === "Básico" 
-                            ? "border-green-500/50 text-green-600" 
-                            : section.difficulty === "Intermediário" 
-                            ? "border-yellow-500/50 text-yellow-600" 
-                            : "border-red-500/50 text-red-600"
-                        }
-                      >
-                        {section.difficulty}
-                      </Badge>
-                    </div>
-
-                    {/* Progress bar */}
-                    {section.progress > 0 && (
-                      <div>
-                        <div className="flex justify-between text-sm mb-2">
-                          <span className="text-muted-foreground">Progresso</span>
-                          <span className="font-semibold text-os-primary">{section.progress}%</span>
-                        </div>
-                        <Progress value={section.progress} className="h-2" />
-                      </div>
-                    )}
-
-                    {/* CTA */}
-                    <div className="flex items-center justify-between pt-2">
-                      <span className="text-os-primary font-semibold flex items-center gap-2 group-hover:gap-3 transition-all">
-                        {section.progress === 100 ? "Revisar módulo" : section.progress > 0 ? "Continuar" : "Começar agora"}
-                        <motion.span
-                          animate={{ x: [0, 5, 0] }}
-                          transition={{ duration: 1.5, repeat: Infinity }}
-                        >
-                          →
-                        </motion.span>
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
+                  );
+                })}
+              </div>
             </motion.div>
-          ))}
-        </motion.div>
+          </div>
+        </div>
       </div>
 
-      {/* Learning Path */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.6 }}
-      >
-        <Card className="p-6 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-blue-500/30">
-          <CardHeader>
-            <CardTitle className="text-2xl flex items-center gap-2">
-              <Zap className="size-6 text-blue-500" />
-              Dica de Aprendizado
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 text-muted-foreground">
-            <p className="text-lg">
-              <strong className="text-foreground">Sugestão:</strong> Comece pelo módulo de <strong className="text-os-primary">Gerenciamento de Memória</strong> 
-              para entender os conceitos fundamentais de paginação, segmentação e memória virtual. 
-              Estes conceitos são essenciais para compreender os demais módulos.
-            </p>
-            <div className="flex gap-2 pt-2">
-              <Badge variant="secondary" className="bg-blue-500/20 text-blue-400">
-                <CheckCircle2 className="size-3 mr-1" />
-                4 Seções completas
-              </Badge>
-              <Badge variant="secondary" className="bg-purple-500/20 text-purple-400">
-                6 Simuladores interativos
-              </Badge>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
+      {/* Main Content - Compact */}
+      <div className="container mx-auto px-6 py-8">
+        <div className="max-w-6xl mx-auto space-y-6">
+          {/* Modules Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {modules.map((module, idx) => {
+              const Icon = module.icon;
+              return (
+                <motion.div
+                  key={module.href}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.08, duration: 0.4 }}
+                >
+                  <Link href={module.href}>
+                    <Card className={`group relative overflow-hidden border-2 border-border hover:border-os-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-os-primary/10 cursor-pointer h-full`}>
+                      {/* Header with gradient */}
+                      <div className={`p-4 bg-gradient-to-r ${module.color} relative`}>
+                        <div className="absolute inset-0 bg-black/10" />
+                        <div className="relative z-10 flex items-start justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+                              <Icon className="size-5 text-white" />
+                            </div>
+                            <div>
+                              <h3 className="text-lg font-bold text-white">{module.title}</h3>
+                              <Badge variant="secondary" className="bg-white/20 text-white border-white/20 text-[10px] mt-1">
+                                {module.difficulty}
+                              </Badge>
+                            </div>
+                          </div>
+                          {module.badge && (
+                            <Badge className="bg-white text-gray-900 font-bold">
+                              {module.badge}
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Content - Compact */}
+                      <div className="p-4 space-y-4">
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          {module.description}
+                        </p>
+
+                        {/* Features */}
+                        <div className="flex flex-wrap gap-1.5">
+                          {module.features.map((feature) => (
+                            <Badge
+                              key={feature}
+                              variant="outline"
+                              className={`${module.bgColor} border-border/50 text-xs`}
+                            >
+                              {feature}
+                            </Badge>
+                          ))}
+                        </div>
+
+                        {/* CTA */}
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-between group-hover:bg-os-primary/10 transition-colors text-sm"
+                        >
+                          <span>Explorar módulo</span>
+                          <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
+                        </Button>
+                      </div>
+                    </Card>
+                  </Link>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Info Card - Compact */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <Card className="p-6 bg-gradient-to-br from-os-primary/5 to-os-secondary/5 border-os-primary/20">
+              <div className="flex items-start gap-4">
+                <div className="p-3 bg-gradient-to-br from-os-primary to-os-secondary rounded-xl">
+                  <Brain className="size-6 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-bold mb-2">Sobre o Módulo</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">
+                    Este módulo cobre todos os aspectos de gerenciamento de memória em sistemas operacionais,
+                    desde conceitos básicos até técnicas avançadas de memória virtual e algoritmos de substituição.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <Badge variant="outline" className="text-xs">Baseado em Tanenbaum</Badge>
+                    <Badge variant="outline" className="text-xs">100% Validado</Badge>
+                    <Badge variant="outline" className="text-xs">Interativo</Badge>
+                    <Badge variant="outline" className="text-xs">Gamificado</Badge>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+        </div>
+      </div>
     </div>
   );
 }
