@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Text, Box } from "@react-three/drei";
+import { OrbitControls, Text } from "@react-three/drei";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { Play, RotateCcw, Zap } from "lucide-react";
 import * as THREE from "three";
+import { boxGeometry, tallBoxGeometry, sphereGeometry } from "@/lib/utils/3d-optimizations";
 
 interface TLBEntry {
   page: number;
@@ -23,18 +24,28 @@ interface TLBEntry {
 function TLBBox({ position, color, label, isActive }: { position: [number, number, number]; color: string; label: string; isActive: boolean }) {
   const meshRef = useRef<THREE.Mesh>(null);
   
-  useFrame((state) => {
+  // Memoize material to prevent recreation
+  const material = useMemo(() => new THREE.MeshStandardMaterial({
+    color,
+    metalness: 0.5,
+    roughness: 0.3,
+  }), [color]);
+  
+  // Optimized animation using delta time
+  useFrame((state, delta) => {
     if (meshRef.current && isActive) {
-      meshRef.current.rotation.y += 0.02;
-      meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 2) * 0.1;
+      // Use delta for framerate-independent animation
+      meshRef.current.rotation.y += delta * 2;
+      
+      // Use state.clock for smooth oscillation
+      const time = state.clock.elapsedTime;
+      meshRef.current.position.y = position[1] + Math.sin(time * 2) * 0.1;
     }
   });
 
   return (
     <group position={position}>
-      <Box ref={meshRef} args={[1, 1, 1]}>
-        <meshStandardMaterial color={color} metalness={0.5} roughness={0.3} />
-      </Box>
+      <mesh ref={meshRef} geometry={boxGeometry} material={material} />
       <Text
         position={[0, 1.2, 0]}
         fontSize={0.3}
@@ -51,17 +62,23 @@ function TLBBox({ position, color, label, isActive }: { position: [number, numbe
 function MemoryBlock({ position, color, label }: { position: [number, number, number]; color: string; label: string }) {
   const meshRef = useRef<THREE.Mesh>(null);
   
-  useFrame(() => {
+  // Memoize material
+  const material = useMemo(() => new THREE.MeshStandardMaterial({
+    color,
+    metalness: 0.3,
+    roughness: 0.7,
+  }), [color]);
+  
+  // Optimized rotation
+  useFrame((state, delta) => {
     if (meshRef.current) {
-      meshRef.current.rotation.y += 0.005;
+      meshRef.current.rotation.y += delta * 0.5;
     }
   });
 
   return (
     <group position={position}>
-      <Box ref={meshRef} args={[0.8, 2, 0.8]}>
-        <meshStandardMaterial color={color} metalness={0.3} roughness={0.7} />
-      </Box>
+      <mesh ref={meshRef} geometry={tallBoxGeometry} material={material} />
       <Text
         position={[0, 1.5, 0]}
         fontSize={0.2}
@@ -76,14 +93,27 @@ function MemoryBlock({ position, color, label }: { position: [number, number, nu
 
 function DataParticle({ start, end, active }: { start: [number, number, number]; end: [number, number, number]; active: boolean }) {
   const meshRef = useRef<THREE.Mesh>(null);
-  const [progress, setProgress] = useState(0);
+  const progressRef = useRef(0);
+  
+  // Memoize emissive material
+  const material = useMemo(() => new THREE.MeshStandardMaterial({
+    color: "#00ff88",
+    emissive: "#00ff88",
+    emissiveIntensity: 2,
+  }), []);
 
-  useFrame(() => {
+  // Optimized animation without state
+  useFrame((state, delta) => {
     if (active && meshRef.current) {
-      setProgress((p) => (p + 0.02) % 1);
+      // Update progress using ref (no re-render)
+      progressRef.current = (progressRef.current + delta * 0.5) % 1;
+      const progress = progressRef.current;
+      
+      // Calculate position with arc
       const x = start[0] + (end[0] - start[0]) * progress;
       const y = start[1] + (end[1] - start[1]) * progress + Math.sin(progress * Math.PI) * 0.5;
       const z = start[2] + (end[2] - start[2]) * progress;
+      
       meshRef.current.position.set(x, y, z);
     }
   });
@@ -91,10 +121,7 @@ function DataParticle({ start, end, active }: { start: [number, number, number];
   if (!active) return null;
 
   return (
-    <mesh ref={meshRef}>
-      <sphereGeometry args={[0.1, 16, 16]} />
-      <meshStandardMaterial color="#00ff88" emissive="#00ff88" emissiveIntensity={2} />
-    </mesh>
+    <mesh ref={meshRef} geometry={sphereGeometry} material={material} />
   );
 }
 

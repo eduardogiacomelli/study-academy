@@ -1,657 +1,288 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { 
-  BookOpen, 
-  Layers, 
-  Info,
-  Play,
-  Code2,
-  Lightbulb,
-  Shield,
-  AlertTriangle
-} from "lucide-react";
+import { ScrollProgressBar } from "@/components/shared/ScrollProgressBar";
 import Link from "next/link";
-import { SegmentationSimulator } from "@/components/os/SegmentationSimulator";
+import {
+  BookOpen,
+  Layers,
+  Play,
+  GitCompare,
+  Shield,
+  Table,
+  Combine,
+  Cpu,
+  GraduationCap,
+  CheckCircle,
+  ArrowRight
+} from "lucide-react";
 
-export default function SegmentacaoPage() {
-  const [activeTab, setActiveTab] = useState("teoria");
+const sections = [
+  {
+    id: "teoria",
+    title: "Teoria Completa",
+    description: "Conceitos fundamentais, motivação, divisão lógica e tabela de segmentos",
+    icon: BookOpen,
+    href: "/os/memoria/segmentacao/teoria",
+    gradient: "from-purple-500 to-pink-500",
+    features: ["Conceitos", "Motivação", "Divisão Lógica", "Proteção"],
+    badge: "Essencial",
+    badgeColor: "bg-purple-500/20 text-purple-400 border-purple-500/30"
+  },
+  {
+    id: "simulador",
+    title: "Simulador 2D",
+    description: "Visualize alocação de segmentos, fragmentação externa e compactação",
+    icon: Play,
+    href: "/os/memoria/segmentacao/simulador",
+    gradient: "from-blue-500 to-cyan-500",
+    features: ["Alocação", "Fragmentação", "Compactação", "Interativo"],
+    badge: "Interativo",
+    badgeColor: "bg-blue-500/20 text-blue-400 border-blue-500/30"
+  },
+  {
+    id: "vs-paginacao",
+    title: "vs Paginação",
+    description: "Comparação detalhada: vantagens, desvantagens e casos de uso",
+    icon: GitCompare,
+    href: "/os/memoria/segmentacao/vs-paginacao",
+    gradient: "from-amber-500 to-orange-500",
+    features: ["Comparação", "Tabelas", "Diagramas", "Análise"],
+    badge: "Comparativo",
+    badgeColor: "bg-amber-500/20 text-amber-400 border-amber-500/30"
+  },
+  {
+    id: "protecao",
+    title: "Proteção e Compartilhamento",
+    description: "Bits R/W/X, SEGFAULT, bibliotecas compartilhadas e Copy-on-Write",
+    icon: Shield,
+    href: "/os/memoria/segmentacao/protecao",
+    gradient: "from-green-500 to-emerald-500",
+    features: ["R/W/X", "SEGFAULT", "Compartilhamento", "COW"],
+    badge: "Segurança",
+    badgeColor: "bg-green-500/20 text-green-400 border-green-500/30"
+  },
+  {
+    id: "tabela",
+    title: "Tabela de Segmentos",
+    description: "Estrutura STE, base + limite, tradução de endereços passo-a-passo",
+    icon: Table,
+    href: "/os/memoria/segmentacao/tabela",
+    gradient: "from-indigo-500 to-purple-500",
+    features: ["STE", "Base/Limite", "Tradução", "STBR/STLR"],
+    badge: "Técnico",
+    badgeColor: "bg-indigo-500/20 text-indigo-400 border-indigo-500/30"
+  },
+  {
+    id: "combinado",
+    title: "Segmentação + Paginação",
+    description: "Sistema híbrido, dupla tradução, vantagens e arquitetura x86",
+    icon: Combine,
+    href: "/os/memoria/segmentacao/combinado",
+    gradient: "from-violet-500 to-fuchsia-500",
+    features: ["Híbrido", "Dupla Tradução", "x86", "GDT/LDT"],
+    badge: "Avançado",
+    badgeColor: "bg-violet-500/20 text-violet-400 border-violet-500/30"
+  },
+  {
+    id: "x86",
+    title: "Intel x86 Real",
+    description: "Segment registers, descriptors, privilege levels e flat model",
+    icon: Cpu,
+    href: "/os/memoria/segmentacao/x86",
+    gradient: "from-red-500 to-rose-500",
+    features: ["CS/DS/SS/ES", "Ring 0-3", "Flat Model", "Assembly"],
+    badge: "Hardware",
+    badgeColor: "bg-red-500/20 text-red-400 border-red-500/30"
+  },
+  {
+    id: "exercicios",
+    title: "Exercícios",
+    description: "20+ questões práticas com tutoriais e resoluções detalhadas",
+    icon: GraduationCap,
+    href: "/os/memoria/segmentacao/exercicios",
+    gradient: "from-teal-500 to-cyan-500",
+    features: ["20+ Questões", "Tutoriais", "Resoluções", "Hints"],
+    badge: "Prática",
+    badgeColor: "bg-teal-500/20 text-teal-400 border-teal-500/30"
+  },
+  {
+    id: "conclusao",
+    title: "Conclusão",
+    description: "Resumo, comparações finais, uso moderno e próximos passos",
+    icon: CheckCircle,
+    href: "/os/memoria/segmentacao/conclusao",
+    gradient: "from-green-500 to-lime-500",
+    features: ["Resumo", "Comparações", "Moderno", "Stats"],
+    badge: "Final",
+    badgeColor: "bg-green-500/20 text-green-400 border-green-500/30"
+  }
+];
 
+export default function SegmentacaoHubPage() {
   return (
     <div className="min-h-screen bg-background">
-    <div className="container mx-auto px-6 py-6">
-      <div className="max-w-6xl mx-auto space-y-8">
-    <div className="space-y-8">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="flex items-center gap-3 mb-4">
-          <div className="p-3 rounded-xl gradient-os">
-            <Layers className="size-6 text-white" />
-          </div>
-          <div>
-            <h1 className="text-4xl font-bold">Segmentação</h1>
-            <p className="text-muted-foreground">
-              Organização Lógica da Memória em Segmentos
-            </p>
-          </div>
-        </div>
+      <ScrollProgressBar />
+
+      {/* Hero Section */}
+      <header className="relative overflow-hidden pt-24 pb-20 bg-gradient-to-br from-purple-600 via-pink-600 to-rose-600">
+        <div className="absolute inset-0 bg-black/20" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,transparent_0%,rgba(0,0,0,0.4)_100%)]" />
         
-        <div className="flex gap-2">
-          <Badge className="bg-os-primary/10 text-os-primary border-os-primary/20">
-            Tanenbaum Cap. 3.2
-          </Badge>
-          <Badge className="bg-os-primary/10 text-os-primary border-os-primary/20">
-            Silberschatz Cap. 8.2
-          </Badge>
+        {/* Animated grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff12_1px,transparent_1px),linear-gradient(to_bottom,#ffffff12_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+
+        <div className="relative container mx-auto px-4 sm:px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center max-w-4xl mx-auto text-white"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm mb-6">
+              <Layers className="size-5" />
+              <span className="text-sm font-semibold">Gerenciamento de Memória</span>
+            </div>
+
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+              Segmentação
+            </h1>
+
+            <p className="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed">
+              Divisão lógica da memória em segmentos de tamanhos variáveis:
+              código, dados, pilha e heap
+            </p>
+
+            <div className="flex flex-wrap justify-center gap-3">
+              <Badge variant="secondary" className="bg-white/20 text-white border-white/30 text-sm px-4 py-2">
+                <Layers className="size-4 mr-2" />
+                Tamanhos Variáveis
+              </Badge>
+              <Badge variant="secondary" className="bg-white/20 text-white border-white/30 text-sm px-4 py-2">
+                <Shield className="size-4 mr-2" />
+                Proteção Granular
+              </Badge>
+              <Badge variant="secondary" className="bg-white/20 text-white border-white/30 text-sm px-4 py-2">
+                <Combine className="size-4 mr-2" />
+                Compartilhamento
+              </Badge>
+            </div>
+          </motion.div>
         </div>
-      </motion.div>
+      </header>
 
-      {/* Main Content Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="teoria" className="flex items-center gap-2">
-            <BookOpen className="size-4" />
-            Teoria
-          </TabsTrigger>
-          <TabsTrigger value="simulador" className="flex items-center gap-2">
-            <Play className="size-4" />
-            Simulador
-          </TabsTrigger>
-          <TabsTrigger value="exemplos" className="flex items-center gap-2">
-            <Code2 className="size-4" />
-            Exemplos
-          </TabsTrigger>
-        </TabsList>
-
-        {/* Teoria */}
-        <TabsContent value="teoria" className="space-y-6">
-          <Card className="p-8">
-            <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
-              <Lightbulb className="size-8 text-os-primary" />
-              O que é Segmentação?
-            </h2>
-            
-            <div className="prose prose-lg dark:prose-invert max-w-none space-y-6">
-              <p className="text-lg leading-relaxed">
-                A <span className="text-os-primary font-semibold">segmentação</span> é um esquema de
-                gerenciamento de memória que suporta a visão do usuário/programador da memória. Um programa
-                é uma coleção de segmentos, onde cada segmento é uma unidade lógica como:
-              </p>
-
-              <div className="grid md:grid-cols-2 gap-6 my-8">
-                {[
-                  {
-                    title: "Código (Text)",
-                    description: "Instruções do programa",
-                    icon: Code2,
-                    color: "bg-blue-500"
-                  },
-                  {
-                    title: "Dados (Data)",
-                    description: "Variáveis globais e estáticas",
-                    icon: Shield,
-                    color: "bg-green-500"
-                  },
-                  {
-                    title: "Pilha (Stack)",
-                    description: "Variáveis locais e chamadas de função",
-                    icon: Layers,
-                    color: "bg-purple-500"
-                  },
-                  {
-                    title: "Heap",
-                    description: "Memória alocada dinamicamente",
-                    icon: AlertTriangle,
-                    color: "bg-amber-500"
-                  },
-                ].map((seg, i) => (
-                  <Card key={i} className="p-6 bg-gradient-to-br from-os-primary/5 to-transparent border-os-primary/20">
-                    <div className={`size-10 rounded-lg ${seg.color} flex items-center justify-center mb-3`}>
-                      <seg.icon className="size-5 text-white" />
-                    </div>
-                    <h3 className="text-lg font-bold mb-2">{seg.title}</h3>
-                    <p className="text-sm text-muted-foreground">{seg.description}</p>
+      {/* Main Content */}
+      <div className="container mx-auto px-4 sm:px-6 py-12">
+        <div className="max-w-7xl mx-auto">
+          {/* Stats */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16"
+          >
+            {[
+              { label: "Páginas", value: "10", icon: BookOpen },
+              { label: "Simuladores", value: "2", icon: Play },
+              { label: "Exercícios", value: "10+", icon: GraduationCap },
+              { label: "Tópicos", value: "15+", icon: Layers }
+            ].map((stat, idx) => {
+              const Icon = stat.icon;
+              return (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3 + idx * 0.1 }}
+                >
+                  <Card className="p-6 text-center hover:shadow-lg transition-shadow">
+                    <Icon className="size-8 mx-auto mb-3 text-purple-500" />
+                    <div className="text-3xl font-bold mb-1">{stat.value}</div>
+                    <div className="text-sm text-muted-foreground">{stat.label}</div>
                   </Card>
-                ))}
-              </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
 
-              <Alert className="bg-os-primary/5 border-os-primary/20">
-                <Info className="size-4" />
-                <AlertDescription>
-                  <strong>Diferença Chave:</strong> Na paginação, a memória é dividida em blocos de tamanho
-                  fixo sem significado lógico. Na segmentação, cada segmento tem um significado lógico específico
-                  e pode ter tamanho variável.
-                </AlertDescription>
-              </Alert>
+          {/* Sections Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {sections.map((section, idx) => {
+              const Icon = section.icon;
+              return (
+                <motion.div
+                  key={section.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 + idx * 0.1 }}
+                >
+                  <Link href={section.href}>
+                    <Card className="group p-6 h-full hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer relative overflow-hidden border-2 hover:border-purple-500/30">
+                      {/* Gradient background */}
+                      <div className={`absolute inset-0 bg-gradient-to-br ${section.gradient} opacity-0 group-hover:opacity-10 transition-opacity`} />
+                      
+                      <div className="relative">
+                        {/* Header */}
+                        <div className="flex items-start justify-between mb-4">
+                          <div className={`p-3 rounded-xl bg-gradient-to-br ${section.gradient} opacity-90 group-hover:scale-110 transition-transform`}>
+                            <Icon className="size-6 text-white" />
+                          </div>
+                          <Badge className={section.badgeColor}>
+                            {section.badge}
+                          </Badge>
+                        </div>
 
-              <h3 className="text-2xl font-bold mt-8 mb-4">Como Funciona?</h3>
-              
-              <p className="leading-relaxed">
-                Cada segmento é identificado por um <strong>número de segmento</strong> e tem
-                um <strong>comprimento</strong> (limit). O endereço lógico é composto de duas partes:
-              </p>
+                        {/* Content */}
+                        <h3 className="text-xl font-bold mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                          {section.title}
+                        </h3>
+                        <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                          {section.description}
+                        </p>
 
-              <div className="bg-muted/30 p-6 rounded-lg my-6">
-                <div className="flex items-center justify-center gap-4 mb-4">
-                  <div className="text-center">
-                    <div className="px-6 py-3 bg-os-primary/20 border-2 border-os-primary rounded font-mono text-lg font-bold">
-                      Endereço Lógico
-                    </div>
-                  </div>
-                  <div className="text-2xl">=</div>
-                  <div className="text-center">
-                    <div className="px-6 py-3 bg-os-primary border-2 border-os-primary rounded font-mono text-lg font-bold text-white">
-                      Número do Segmento (s)
-                    </div>
-                    <p className="text-xs mt-2 text-muted-foreground">índice na tabela de segmentos</p>
-                  </div>
-                  <div className="text-2xl">+</div>
-                  <div className="text-center">
-                    <div className="px-6 py-3 bg-cyan-500 border-2 border-cyan-500 rounded font-mono text-lg font-bold text-white">
-                      Deslocamento (d)
-                    </div>
-                    <p className="text-xs mt-2 text-muted-foreground">posição dentro do segmento</p>
-                  </div>
-                </div>
-              </div>
+                        {/* Features */}
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {section.features.map((feature, i) => (
+                            <span
+                              key={i}
+                              className="text-xs px-2 py-1 rounded-full bg-muted/50 text-muted-foreground"
+                            >
+                              {feature}
+                            </span>
+                          ))}
+                        </div>
 
-              <h3 className="text-2xl font-bold mt-8 mb-4">Tabela de Segmentos</h3>
-              
-              <p className="leading-relaxed">
-                A <span className="text-os-primary font-semibold">Tabela de Segmentos</span> mapeia segmentos
-                lógicos bidimensionais para endereços físicos unidimensionais. Cada entrada contém:
-              </p>
+                        {/* Arrow */}
+                        <div className="flex items-center text-sm font-medium text-purple-600 dark:text-purple-400 group-hover:translate-x-1 transition-transform">
+                          Explorar
+                          <ArrowRight className="size-4 ml-1" />
+                        </div>
+                      </div>
+                    </Card>
+                  </Link>
+                </motion.div>
+              );
+            })}
+          </div>
 
-              <Card className="p-6 bg-gradient-to-br from-cyan-500/5 to-transparent border-cyan-500/20 mt-6">
-                <div className="grid md:grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <strong className="text-os-primary">Base:</strong> Endereço físico inicial do segmento
-                  </div>
-                  <div>
-                    <strong className="text-os-primary">Limit:</strong> Tamanho do segmento
-                  </div>
-                  <div>
-                    <strong className="text-os-primary">Present Bit:</strong> Segmento está na memória?
-                  </div>
-                  <div>
-                    <strong className="text-os-primary">Protection Bits:</strong> Permissões (R/W/X)
-                  </div>
-                </div>
-              </Card>
-
-              <h3 className="text-2xl font-bold mt-8 mb-4">Processo de Tradução</h3>
-              
-              <div className="bg-gradient-to-r from-os-primary/10 to-cyan-500/10 p-6 rounded-lg mt-6">
-                <ol className="space-y-3">
-                  <li className="flex items-start gap-3">
-                    <Badge className="min-w-fit">1</Badge>
-                    <div>
-                      <strong>Extrair s e d:</strong> Do endereço lógico (s, d)
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <Badge className="min-w-fit">2</Badge>
-                    <div>
-                      <strong>Verificar limite:</strong> Se d ≥ limit → Segmentation Fault
-                      <Alert className="mt-2 bg-red-500/5 border-red-500/20">
-                        <AlertTriangle className="size-3 text-red-500" />
-                        <AlertDescription className="text-xs">
-                          Proteção contra acesso inválido!
-                        </AlertDescription>
-                      </Alert>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <Badge className="min-w-fit">3</Badge>
-                    <div>
-                      <strong>Calcular endereço físico:</strong> físico = base + d
-                    </div>
-                  </li>
-                </ol>
-              </div>
-
-              <h3 className="text-2xl font-bold mt-8 mb-4">Vantagens da Segmentação</h3>
-              
-              <div className="grid md:grid-cols-2 gap-4 mt-4">
-                {[
-                  {
-                    title: "Estrutura Lógica",
-                    description: "Reflete a organização natural do programa"
-                  },
-                  {
-                    title: "Proteção",
-                    description: "Cada segmento pode ter permissões diferentes"
-                  },
-                  {
-                    title: "Compartilhamento",
-                    description: "Segmentos podem ser compartilhados entre processos"
-                  },
-                  {
-                    title: "Crescimento Dinâmico",
-                    description: "Segmentos podem crescer ou diminuir"
-                  },
-                ].map((item, i) => (
-                  <Card key={i} className="p-4 bg-os-primary/5 border-os-primary/20">
-                    <h4 className="font-bold mb-2 text-os-primary">✓ {item.title}</h4>
-                    <p className="text-sm text-muted-foreground">{item.description}</p>
-                  </Card>
-                ))}
-              </div>
-
-              <h3 className="text-2xl font-bold mt-8 mb-4">Desvantagens e Desafios</h3>
-              
-              <div className="space-y-3 mt-4">
-                {[
-                  {
-                    title: "Fragmentação Externa",
-                    description: "Espaços livres pequenos entre segmentos podem não ser utilizáveis"
-                  },
-                  {
-                    title: "Alocação Complexa",
-                    description: "Precisa encontrar buraco grande o suficiente para o segmento"
-                  },
-                  {
-                    title: "Compactação",
-                    description: "Pode ser necessária para eliminar fragmentação (custosa)"
-                  },
-                ].map((item, i) => (
-                  <Card key={i} className="p-4 bg-amber-500/5 border-amber-500/20">
-                    <h4 className="font-bold mb-2 text-amber-600 dark:text-amber-400">⚠️ {item.title}</h4>
-                    <p className="text-sm text-muted-foreground">{item.description}</p>
-                  </Card>
-                ))}
-              </div>
-
-              <h3 className="text-2xl font-bold mt-8 mb-4">Segmentação vs Paginação</h3>
-              
-              <div className="overflow-x-auto mt-6">
-                <table className="w-full text-sm border">
-                  <thead>
-                    <tr className="bg-muted/50">
-                      <th className="border p-3 text-left">Característica</th>
-                      <th className="border p-3 text-left">Segmentação</th>
-                      <th className="border p-3 text-left">Paginação</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      {
-                        feature: "Tamanho dos blocos",
-                        seg: "Variável (cada segmento tem tamanho diferente)",
-                        pag: "Fixo (todas as páginas têm mesmo tamanho)"
-                      },
-                      {
-                        feature: "Visibilidade ao programador",
-                        seg: "Visível (o programador trabalha com segmentos)",
-                        pag: "Transparente (o programador não vê as páginas)"
-                      },
-                      {
-                        feature: "Organização lógica",
-                        seg: "Sim (código, dados, pilha são separados)",
-                        pag: "Não (divisão arbitrária da memória)"
-                      },
-                      {
-                        feature: "Fragmentação",
-                        seg: "Externa (espaços entre segmentos)",
-                        pag: "Interna (espaço não utilizado na última página)"
-                      },
-                      {
-                        feature: "Proteção",
-                        seg: "Natural (cada segmento tem permissões)",
-                        pag: "Artificial (páginas não têm significado lógico)"
-                      },
-                      {
-                        feature: "Compartilhamento",
-                        seg: "Fácil (compartilhar código, bibliotecas)",
-                        pag: "Mais difícil"
-                      },
-                    ].map((row, i) => (
-                      <tr key={i} className={i % 2 === 0 ? "bg-muted/20" : ""}>
-                        <td className="border p-3 font-semibold">{row.feature}</td>
-                        <td className="border p-3">{row.seg}</td>
-                        <td className="border p-3">{row.pag}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              <Alert className="bg-green-500/5 border-green-500/20 mt-6">
-                <Lightbulb className="size-4 text-green-500" />
-                <AlertDescription>
-                  <strong>Sistemas Modernos:</strong> Muitos SOs usam uma combinação de segmentação
-                  e paginação (segmentação paginada) para obter as vantagens de ambas as técnicas.
-                </AlertDescription>
-              </Alert>
-            </div>
-          </Card>
-
-          {/* Exemplo Prático */}
-          <Card className="p-8 bg-gradient-to-br from-os-primary/5 to-transparent">
-            <h3 className="text-2xl font-bold mb-6">Exemplo Prático de Tradução</h3>
-            
-            <div className="space-y-6">
-              <div className="bg-muted/30 p-6 rounded-lg">
-                <h4 className="font-bold mb-4">Tabela de Segmentos:</h4>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="border-b">
-                        <th className="text-left p-2">Segmento</th>
-                        <th className="text-left p-2">Base (Endereço Físico)</th>
-                        <th className="text-left p-2">Limit (Tamanho)</th>
-                        <th className="text-left p-2">Tipo</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className="border-b">
-                        <td className="p-2 font-mono">0</td>
-                        <td className="p-2 font-mono">1400</td>
-                        <td className="p-2 font-mono">1000</td>
-                        <td className="p-2">Código</td>
-                      </tr>
-                      <tr className="border-b">
-                        <td className="p-2 font-mono">1</td>
-                        <td className="p-2 font-mono">6300</td>
-                        <td className="p-2 font-mono">400</td>
-                        <td className="p-2">Dados</td>
-                      </tr>
-                      <tr className="border-b">
-                        <td className="p-2 font-mono">2</td>
-                        <td className="p-2 font-mono">4300</td>
-                        <td className="p-2 font-mono">400</td>
-                        <td className="p-2">Pilha</td>
-                      </tr>
-                      <tr className="border-b">
-                        <td className="p-2 font-mono">3</td>
-                        <td className="p-2 font-mono">3200</td>
-                        <td className="p-2 font-mono">1100</td>
-                        <td className="p-2">Heap</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              <div className="bg-muted/30 p-6 rounded-lg">
-                <h4 className="font-bold mb-4">Traduzir: (1, 53)</h4>
-                <ol className="space-y-4">
-                  <li className="flex gap-4">
-                    <Badge className="min-w-fit h-fit">1</Badge>
-                    <div>
-                      <div className="font-semibold mb-1">Segmento 1 (Dados):</div>
-                      <code className="text-sm bg-background px-3 py-1 rounded">
-                        Base = 6300, Limit = 400
-                      </code>
-                    </div>
-                  </li>
-                  <li className="flex gap-4">
-                    <Badge className="min-w-fit h-fit">2</Badge>
-                    <div>
-                      <div className="font-semibold mb-1">Verificar limite:</div>
-                      <code className="text-sm bg-background px-3 py-1 rounded">
-                        53 &lt; 400 ✓ (válido)
-                      </code>
-                    </div>
-                  </li>
-                  <li className="flex gap-4">
-                    <Badge className="min-w-fit h-fit">3</Badge>
-                    <div>
-                      <div className="font-semibold mb-1">Calcular endereço físico:</div>
-                      <code className="text-sm bg-background px-3 py-1 rounded">
-                        físico = 6300 + 53 = 6353
-                      </code>
-                    </div>
-                  </li>
-                </ol>
-              </div>
-
-              <Alert className="bg-green-500/5 border-green-500/20">
-                <Lightbulb className="size-4 text-green-500" />
-                <AlertDescription>
-                  <strong>Resultado:</strong> O endereço lógico (1, 53) é mapeado para o endereço físico 6353
-                </AlertDescription>
-              </Alert>
-
-              <div className="bg-red-500/5 p-6 rounded-lg border border-red-500/20 mt-6">
-                <h4 className="font-bold mb-4 text-red-600 dark:text-red-400">Exemplo de Erro:</h4>
-                <p className="mb-2">Traduzir: (1, 500)</p>
-                <ol className="space-y-2 text-sm">
-                  <li>Segmento 1 tem limit = 400</li>
-                  <li>500 &gt; 400 ⚠️</li>
-                  <li className="font-bold text-red-600 dark:text-red-400">
-                    → SEGMENTATION FAULT! Acesso inválido
-                  </li>
-                </ol>
-              </div>
-            </div>
-          </Card>
-        </TabsContent>
-
-        {/* Simulador */}
-        <TabsContent value="simulador" className="space-y-6">
-          <Card className="p-8">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-3xl font-bold mb-2">Simulador de Segmentação</h2>
-                <p className="text-muted-foreground">
-                  Visualize o processo de tradução de endereços com segmentos
-                </p>
-              </div>
-            </div>
-            
-            <SegmentationSimulator />
-          </Card>
-        </TabsContent>
-
-        {/* Exemplos de Código */}
-        <TabsContent value="exemplos" className="space-y-6">
-          <Card className="p-8">
-            <h2 className="text-3xl font-bold mb-6">Exemplos de Implementação</h2>
-            
-            <div className="space-y-6">
-              {/* Exemplo 1 */}
-              <div>
-                <h3 className="text-xl font-bold mb-3">1. Estrutura da Tabela de Segmentos</h3>
-                <div className="bg-muted/30 p-4 rounded-lg">
-                  <pre className="text-sm overflow-x-auto">
-                    <code>{`// Estrutura de uma entrada na tabela de segmentos
-struct SegmentTableEntry {
-    unsigned int base;           // Endereço físico inicial
-    unsigned int limit;          // Tamanho do segmento
-    unsigned int present : 1;    // Está na memória?
-    unsigned int protection : 3; // Bits de proteção (R/W/X)
-    unsigned int valid : 1;      // Entrada válida?
-};
-
-// Tipos de segmentos
-enum SegmentType {
-    SEGMENT_CODE,    // Código (read + execute)
-    SEGMENT_DATA,    // Dados (read + write)
-    SEGMENT_STACK,   // Pilha (read + write)
-    SEGMENT_HEAP     // Heap (read + write)
-};
-
-// Tabela de segmentos
-struct SegmentTable {
-    SegmentTableEntry *entries;
-    unsigned int num_segments;
-};`}</code>
-                  </pre>
-                </div>
-              </div>
-
-              {/* Exemplo 2 */}
-              <div>
-                <h3 className="text-xl font-bold mb-3">2. Tradução de Endereço Segmentado</h3>
-                <div className="bg-muted/30 p-4 rounded-lg">
-                  <pre className="text-sm overflow-x-auto">
-                    <code>{`unsigned int translate_segmented_address(
-    unsigned int segment_number,
-    unsigned int offset,
-    SegmentTable *seg_table
-) {
-    // Verificar se o segmento é válido
-    if (segment_number >= seg_table->num_segments) {
-        printf("Erro: Número de segmento inválido!\\n");
-        return -1;
-    }
-    
-    SegmentTableEntry *entry = &seg_table->entries[segment_number];
-    
-    // Verificar se o segmento está presente
-    if (!entry->present) {
-        printf("Segmentation Fault! Segmento não está na memória.\\n");
-        return -1;
-    }
-    
-    // Verificar se o offset está dentro do limite
-    if (offset >= entry->limit) {
-        printf("Segmentation Fault! Offset %u excede o limite %u.\\n",
-               offset, entry->limit);
-        return -1;
-    }
-    
-    // Calcular endereço físico
-    unsigned int physical_address = entry->base + offset;
-    
-    return physical_address;
-}
-
-// Exemplo de uso
-int main() {
-    // Criar tabela de segmentos
-    SegmentTable seg_table;
-    seg_table.num_segments = 4;
-    seg_table.entries = malloc(4 * sizeof(SegmentTableEntry));
-    
-    // Configurar segmentos
-    seg_table.entries[0] = (SegmentTableEntry){
-        .base = 1400, .limit = 1000, .present = 1, 
-        .protection = 0b101, .valid = 1  // R-X
-    };
-    seg_table.entries[1] = (SegmentTableEntry){
-        .base = 6300, .limit = 400, .present = 1,
-        .protection = 0b110, .valid = 1  // RW-
-    };
-    
-    // Traduzir endereço (1, 53)
-    unsigned int physical = translate_segmented_address(1, 53, &seg_table);
-    printf("Físico: %u\\n", physical);  // Output: 6353
-    
-    // Tentar acesso inválido (1, 500)
-    physical = translate_segmented_address(1, 500, &seg_table);
-    // Output: Segmentation Fault!
-    
-    return 0;
-}`}</code>
-                  </pre>
-                </div>
-              </div>
-
-              {/* Exemplo 3 */}
-              <div>
-                <h3 className="text-xl font-bold mb-3">3. Proteção de Segmentos</h3>
-                <div className="bg-muted/30 p-4 rounded-lg">
-                  <pre className="text-sm overflow-x-auto">
-                    <code>{`// Bits de proteção
-#define PROT_READ    0b100  // 4
-#define PROT_WRITE   0b010  // 2
-#define PROT_EXECUTE 0b001  // 1
-
-// Verificar permissão
-bool check_permission(
-    SegmentTableEntry *entry,
-    unsigned int required_permission
-) {
-    return (entry->protection & required_permission) != 0;
-}
-
-// Acessar segmento com verificação de proteção
-int access_segment(
-    unsigned int segment_number,
-    unsigned int offset,
-    SegmentTable *seg_table,
-    unsigned int access_type  // READ, WRITE ou EXECUTE
-) {
-    // Traduzir endereço
-    unsigned int physical = translate_segmented_address(
-        segment_number, offset, seg_table
-    );
-    
-    if (physical == -1) {
-        return -1;  // Erro na tradução
-    }
-    
-    SegmentTableEntry *entry = &seg_table->entries[segment_number];
-    
-    // Verificar permissão
-    if (!check_permission(entry, access_type)) {
-        printf("Protection Fault! Acesso negado ao segmento %u.\\n",
-               segment_number);
-        printf("Permissões: R%sW%sX%s, Tentativa: %s\\n",
-               (entry->protection & PROT_READ) ? "+" : "-",
-               (entry->protection & PROT_WRITE) ? "+" : "-",
-               (entry->protection & PROT_EXECUTE) ? "+" : "-",
-               access_type == PROT_READ ? "READ" :
-               access_type == PROT_WRITE ? "WRITE" : "EXECUTE");
-        return -1;
-    }
-    
-    // Acesso permitido
-    return physical;
-}
-
-// Exemplo: Tentar escrever no segmento de código
-int main() {
-    SegmentTable seg_table = /* ... */;
-    
-    // Segmento 0 = Código (R-X, sem write)
-    // Tentar escrever
-    int result = access_segment(0, 100, &seg_table, PROT_WRITE);
-    // Output: Protection Fault! Acesso negado...
-    
-    // Tentar executar (OK)
-    result = access_segment(0, 100, &seg_table, PROT_EXECUTE);
-    // Output: Sucesso
-    
-    return 0;
-}`}</code>
-                  </pre>
-                </div>
-              </div>
-            </div>
-          </Card>
-        </TabsContent>
-      </Tabs>
-
-      {/* Navigation */}
-      <div className="flex justify-between items-center pt-8 border-t">
-        <Button variant="outline" asChild>
-          <Link href="/os/memoria/paginacao">
-            ← Anterior: Paginação
-          </Link>
-        </Button>
-        <Button className="gradient-os text-white" asChild>
-          <Link href="/os/memoria/virtual">
-            Próximo: Memória Virtual →
-          </Link>
-        </Button>
+          {/* Bottom Navigation */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.5 }}
+            className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-16 pt-8 border-t"
+          >
+            <Link href="/os/memoria/paginacao" className="text-primary hover:underline flex items-center gap-2">
+              ← Voltar para Paginação
+            </Link>
+            <Link href="/os/memoria/virtual" className="text-primary hover:underline flex items-center gap-2">
+              Próximo: Memória Virtual <ArrowRight className="size-4" />
+            </Link>
+          </motion.div>
+        </div>
       </div>
-      </div>
-      </div>
-    </div>
     </div>
   );
 }
-

@@ -10,8 +10,8 @@ import { Toaster } from "sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "OS & DB Academy - Plataforma de Estudos Interativa",
-  description: "Aprenda Sistemas Operacionais e Banco de Dados com simuladores visuais, exercícios interativos e muito mais.",
+  title: "OS Academy - Plataforma Interativa de Sistemas Operacionais",
+  description: "Aprenda Sistemas Operacionais através de simuladores 3D, exercícios gamificados e visualizações interativas. 12 simuladores, 25+ exercícios validados academicamente.",
 };
 
 export default function RootLayout({

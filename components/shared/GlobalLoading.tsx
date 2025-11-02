@@ -1,21 +1,35 @@
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
-import { usePathname } from "next/navigation";
+import { useEffect, useState, Suspense, useTransition } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2 } from "lucide-react";
 
 function GlobalLoadingContent() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    // Prefetch on mount to improve navigation
+    startTransition(() => {
+      router.prefetch(pathname);
+    });
+  }, [pathname, router]);
 
   useEffect(() => {
     setIsLoading(true);
     
-    // Simulate instant navigation feel
-    const timer = setTimeout(() => setIsLoading(false), 150);
+    // Instant navigation feel with proper cleanup
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 100);
     
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      setIsLoading(false);
+    };
   }, [pathname]);
 
   return (

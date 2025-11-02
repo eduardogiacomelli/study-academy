@@ -1,13 +1,14 @@
 "use client";
 
-import { Suspense, useRef, useState } from "react";
+import { Suspense, useRef, useState, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Text, Box, Line } from "@react-three/drei";
+import { OrbitControls, Text, Line } from "@react-three/drei";
 import * as THREE from "three";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { RotateCcw, Play, Pause } from "lucide-react";
+import { smallBoxGeometry } from "@/lib/utils/3d-optimizations";
 
 interface MemoryBlockProps {
   position: [number, number, number];
@@ -20,31 +21,38 @@ interface MemoryBlockProps {
 function MemoryBlock({ position, color, label, isActive = false, onClick }: MemoryBlockProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
+  
+  // Memoize material with dynamic properties
+  const material = useMemo(() => {
+    return new THREE.MeshStandardMaterial({
+      color: hovered ? "#ffffff" : color,
+      emissive: isActive ? color : "#000000",
+      emissiveIntensity: isActive ? 0.5 : 0,
+      metalness: 0.3,
+      roughness: 0.4,
+    });
+  }, [color, hovered, isActive]);
 
-  useFrame((state) => {
+  // Optimized animation using delta
+  useFrame((state, delta) => {
     if (meshRef.current && isActive) {
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.5;
-      meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 2) * 0.1;
+      meshRef.current.rotation.y += delta * 0.5;
+      
+      const time = state.clock.elapsedTime;
+      meshRef.current.position.y = position[1] + Math.sin(time * 2) * 0.1;
     }
   });
 
   return (
     <group position={position}>
-      <Box
+      <mesh
         ref={meshRef}
-        args={[0.8, 0.8, 0.8]}
+        geometry={smallBoxGeometry}
+        material={material}
         onClick={onClick}
         onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}
-      >
-        <meshStandardMaterial 
-          color={hovered ? "#ffffff" : color} 
-          emissive={isActive ? color : "#000000"}
-          emissiveIntensity={isActive ? 0.5 : 0}
-          metalness={0.3}
-          roughness={0.4}
-        />
-      </Box>
+      />
       <Text
         position={[0, 0, 0.5]}
         fontSize={0.2}

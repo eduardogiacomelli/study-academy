@@ -1,613 +1,391 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
-import { CodeBlock } from "@/components/shared/CodeBlock";
 import { motion } from "framer-motion";
-import { VirtualMemorySimulator } from "@/components/os/VirtualMemorySimulator";
-import { PageFaultVisualizer } from "@/components/os/PageFaultVisualizer";
-import { WorkingSetVisualizer } from "@/components/os/WorkingSetVisualizer";
-import { CopyOnWriteVisualizer } from "@/components/os/CopyOnWriteVisualizer";
-import { EffectiveAccessTimeCalculator } from "@/components/os/EffectiveAccessTimeCalculator";
-import { MemoryHierarchyDiagram } from "@/components/os/MemoryHierarchyDiagram";
-import { AlertCircle, CheckCircle2, Info, Lightbulb } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+import { animate, stagger } from "animejs";
+import { useEffect } from "react";
+import {
+  BookOpen,
+  Cpu,
+  HardDrive,
+  TrendingUp,
+  Zap,
+  Target,
+  BarChart3,
+  Code,
+  GraduationCap,
+  CheckCircle,
+  ArrowRight,
+  Layers,
+  Activity,
+  Database,
+  Timer,
+  Eye
+} from "lucide-react";
 
-const demandPagingCode = `
-// Estrutura de uma entrada na tabela de páginas
-struct PageTableEntry {
-    unsigned int frame_number : 20;  // Número do quadro físico
-    unsigned int present : 1;        // Bit de presença (0 = página não está na RAM)
-    unsigned int modified : 1;       // Bit de modificação (dirty bit)
-    unsigned int referenced : 1;     // Bit de referência
-    unsigned int protection : 2;     // Proteção (R/W/X)
-    unsigned int reserved : 7;       // Bits reservados
-};
+const sections = [
+  {
+    id: "teoria",
+    title: "Teoria Completa",
+    description: "Conceitos fundamentais, arquitetura MMU/TLB e espaço virtual vs físico",
+    icon: BookOpen,
+    href: "/os/memoria/virtual/teoria",
+    gradient: "from-blue-500 to-cyan-500",
+    features: ["Conceitos", "Arquitetura", "MMU/TLB", "Diagramas"],
+    badge: "Essencial",
+    badgeColor: "bg-blue-500/20 text-blue-400 border-blue-500/30"
+  },
+  {
+    id: "visualizacoes",
+    title: "Visualizações Interativas",
+    description: "Address Translation bit-a-bit, Heat Map de acessos, comparações visuais",
+    icon: Eye,
+    href: "/os/memoria/virtual/visualizacoes",
+    gradient: "from-purple-500 to-fuchsia-500",
+    features: ["Translation", "Heat Map", "Interactive", "3D"],
+    badge: "✨ NEW",
+    badgeColor: "bg-fuchsia-500/20 text-fuchsia-400 border-fuchsia-500/30"
+  },
+  {
+    id: "localidade",
+    title: "Localidade de Referência",
+    description: "Temporal, espacial, working set e heatmap interativo",
+    icon: Target,
+    href: "/os/memoria/virtual/localidade",
+    gradient: "from-purple-500 to-pink-500",
+    features: ["Temporal", "Espacial", "Working Set", "Heatmap"],
+    badge: "Interativo",
+    badgeColor: "bg-purple-500/20 text-purple-400 border-purple-500/30"
+  },
+  {
+    id: "demand-paging",
+    title: "Paginação sob Demanda",
+    description: "Lazy loading, prepaging e simulador visual de carregamento",
+    icon: Layers,
+    href: "/os/memoria/virtual/demand-paging",
+    gradient: "from-green-500 to-emerald-500",
+    features: ["Demand", "Lazy Load", "Prepaging", "Animação"],
+    badge: "Visual",
+    badgeColor: "bg-green-500/20 text-green-400 border-green-500/30"
+  },
+  {
+    id: "page-fault",
+    title: "Page Fault Handling",
+    description: "8 etapas detalhadas, major vs minor, código Linux kernel",
+    icon: Activity,
+    href: "/os/memoria/virtual/page-fault",
+    gradient: "from-red-500 to-orange-500",
+    features: ["8 Etapas", "Major/Minor", "Kernel", "Step-by-step"],
+    badge: "Técnico",
+    badgeColor: "bg-red-500/20 text-red-400 border-red-500/30"
+  },
+  {
+    id: "algoritmos",
+    title: "Algoritmos de Substituição",
+    description: "FIFO, LRU, Clock, LFU, Optimal e Belady's Anomaly",
+    icon: BarChart3,
+    href: "/os/memoria/virtual/algoritmos",
+    gradient: "from-amber-500 to-yellow-500",
+    features: ["FIFO/LRU", "Clock/LFU", "Comparador", "Belady"],
+    badge: "Comparativo",
+    badgeColor: "bg-amber-500/20 text-amber-400 border-amber-500/30"
+  },
+  {
+    id: "working-set",
+    title: "Working Set & Thrashing",
+    description: "Conjunto ativo, janela de tempo e prevenção de thrashing",
+    icon: TrendingUp,
+    href: "/os/memoria/virtual/working-set",
+    gradient: "from-cyan-500 to-blue-500",
+    features: ["Working Set", "Thrashing", "PFF", "Gráficos"],
+    badge: "Crítico",
+    badgeColor: "bg-cyan-500/20 text-cyan-400 border-cyan-500/30"
+  },
+  {
+    id: "performance",
+    title: "Performance & EAT",
+    description: "Effective Access Time, TLB miss, calculadora interativa",
+    icon: Zap,
+    href: "/os/memoria/virtual/performance",
+    gradient: "from-indigo-500 to-purple-500",
+    features: ["EAT", "TLB Cost", "Calculadora", "Otimizações"],
+    badge: "Performance",
+    badgeColor: "bg-indigo-500/20 text-indigo-400 border-indigo-500/30"
+  },
+  {
+    id: "linux",
+    title: "Implementação Linux",
+    description: "vm_area_struct, do_page_fault, código C do kernel",
+    icon: Code,
+    href: "/os/memoria/virtual/linux",
+    gradient: "from-teal-500 to-green-500",
+    features: ["Kernel", "C Code", "Structs", "vmstat"],
+    badge: "Real World",
+    badgeColor: "bg-teal-500/20 text-teal-400 border-teal-500/30"
+  },
+  {
+    id: "exercicios",
+    title: "Exercícios",
+    description: "20+ questões práticas, cálculos EAT, simulações",
+    icon: GraduationCap,
+    href: "/os/memoria/virtual/exercicios",
+    gradient: "from-rose-500 to-pink-500",
+    features: ["20+ Questões", "Cálculos", "Tutoriais", "Hints"],
+    badge: "Prática",
+    badgeColor: "bg-rose-500/20 text-rose-400 border-rose-500/30"
+  },
+  {
+    id: "conclusao",
+    title: "Conclusão",
+    description: "Resumo, timeline, quiz final e badge épico",
+    icon: CheckCircle,
+    href: "/os/memoria/virtual/conclusao",
+    gradient: "from-violet-500 to-fuchsia-500",
+    features: ["Resumo", "Timeline", "Quiz", "Stats"],
+    badge: "Final",
+    badgeColor: "bg-violet-500/20 text-violet-400 border-violet-500/30"
+  }
+];
 
-// Função de tradução com suporte a page fault
-int translate_virtual_address(int virtual_address, PageTableEntry* page_table, int* page_faults) {
-    int page_number = virtual_address / PAGE_SIZE;
-    int offset = virtual_address % PAGE_SIZE;
-    
-    PageTableEntry* entry = &page_table[page_number];
-    
-    // Verifica se a página está presente na memória física
-    if (entry->present == 0) {
-        // PAGE FAULT!
-        (*page_faults)++;
-        handle_page_fault(page_number, entry);
-    }
-    
-    // Atualiza bit de referência
-    entry->referenced = 1;
-    
-    // Retorna endereço físico
-    return (entry->frame_number * PAGE_SIZE) + offset;
-}
+export default function MemoriaVirtualHubPage() {
+  useEffect(() => {
+    // Animate cards on mount
+    animate('.hub-card', {
+      translateY: [40, 0],
+      opacity: [0, 1],
+      delay: stagger(100),
+      duration: 800,
+      ease: 'outExpo'
+    });
 
-// Handler de Page Fault
-void handle_page_fault(int page_number, PageTableEntry* entry) {
-    printf("⚠️  PAGE FAULT: Página %d não está na memória RAM\\n", page_number);
-    
-    // 1. Encontrar quadro livre (ou substituir uma página)
-    int free_frame = find_free_frame();
-    if (free_frame == -1) {
-        // Não há quadros livres - precisa substituir
-        free_frame = select_victim_page(); // Usa algoritmo de substituição
-        evict_page(free_frame);            // Remove página antiga
-    }
-    
-    // 2. Carregar página do disco para a memória
-    load_page_from_disk(page_number, free_frame);
-    
-    // 3. Atualizar tabela de páginas
-    entry->frame_number = free_frame;
-    entry->present = 1;
-    entry->modified = 0;
-    entry->referenced = 1;
-    
-              printf(&quot;✅ Página %d carregada no quadro %d\\n&quot;, page_number, free_frame);
-}
-`;
+    // Animate stats
+    animate('.stat-card', {
+      scale: [0.8, 1],
+      opacity: [0, 1],
+      delay: stagger(120, { start: 400 }),
+      duration: 600,
+      ease: 'outBack(1.5)'
+    });
+  }, []);
 
-const copyOnWriteCode = `
-// Copy-on-Write (COW) - Otimização para fork()
-// Processo pai e filho compartilham páginas até que uma seja modificada
-
-struct PageTableEntry {
-    unsigned int frame_number : 20;
-    unsigned int present : 1;
-    unsigned int modified : 1;
-    unsigned int referenced : 1;
-    unsigned int cow : 1;        // Copy-on-Write bit
-    unsigned int writable : 1;   // Originalmente gravável?
-    unsigned int reserved : 7;
-};
-
-// Quando ocorre fork()
-void fork_process(Process* parent, Process* child) {
-    for (int i = 0; i < NUM_PAGES; i++) {
-        PageTableEntry* parent_entry = &parent->page_table[i];
-        PageTableEntry* child_entry = &child->page_table[i];
-        
-        // Ambos apontam para o mesmo quadro físico
-        child_entry->frame_number = parent_entry->frame_number;
-        child_entry->present = parent_entry->present;
-        
-        // Marca como COW e remove permissão de escrita
-        if (parent_entry->writable) {
-            parent_entry->cow = 1;
-            child_entry->cow = 1;
-            parent_entry->modified = 0; // Remove W temporariamente
-            child_entry->modified = 0;
-        }
-        
-        // Incrementa contador de referência do quadro
-        increment_frame_ref_count(parent_entry->frame_number);
-    }
-}
-
-// Quando ocorre tentativa de escrita em página COW
-void handle_cow_fault(int page_number, PageTableEntry* entry) {
-    printf("🔄 COW FAULT: Copiando página %d\\n", page_number);
-    
-    // 1. Aloca novo quadro
-    int new_frame = allocate_frame();
-    
-    // 2. Copia conteúdo do quadro original
-    copy_frame(entry->frame_number, new_frame);
-    
-    // 3. Atualiza entrada da tabela de páginas
-    decrement_frame_ref_count(entry->frame_number);
-    entry->frame_number = new_frame;
-    entry->cow = 0;
-    entry->modified = 1; // Restaura permissão de escrita
-    
-    printf("✅ Página %d agora está no quadro privado %d\\n", page_number, new_frame);
-}
-`;
-
-const workingSetCode = `
-// Working Set e Thrashing
-
-struct WorkingSet {
-    int* pages;           // Páginas no working set
-    int size;             // Tamanho atual
-    int window_size;      // Janela de tempo (delta)
-    long last_access[MAX_PAGES]; // Timestamp do último acesso
-};
-
-// Calcula o working set de um processo
-void calculate_working_set(Process* proc, long current_time) {
-    WorkingSet* ws = &proc->working_set;
-    ws->size = 0;
-    
-    for (int i = 0; i < MAX_PAGES; i++) {
-        // Página foi acessada na janela de tempo?
-        if (current_time - ws->last_access[i] <= ws->window_size) {
-            ws->pages[ws->size++] = i;
-        }
-    }
-}
-
-// Detecção de Thrashing
-bool is_thrashing(Process* proc) {
-    // Thrashing: page fault rate muito alta
-    float page_fault_rate = (float)proc->page_faults / proc->total_references;
-    
-    // Se mais de 50% dos acessos causam page fault, está em thrashing
-    if (page_fault_rate > 0.5) {
-        printf("⚠️  THRASHING DETECTADO!\\n");
-        printf("   - Page Fault Rate: %.2f%%\\n", page_fault_rate * 100);
-        printf("   - Working Set: %d páginas\\n", proc->working_set.size);
-        printf("   - Quadros alocados: %d\\n", proc->allocated_frames);
-        
-        // Processo precisa de mais quadros
-        return true;
-    }
-    
-    return false;
-}
-
-// Prevenção de Thrashing: ajuste de multiprogramação
-void prevent_thrashing() {
-    int total_frames = get_total_frames();
-    int sum_working_sets = 0;
-    
-    for (Process* proc : all_processes) {
-        sum_working_sets += proc->working_set.size;
-    }
-    
-    // Se soma dos working sets > memória disponível
-    if (sum_working_sets > total_frames) {
-        // Reduzir grau de multiprogramação
-        // Suspender alguns processos (swap out)
-        suspend_processes();
-    }
-}
-`;
-
-const thrashingMetricsCode = `
-// Métricas de Performance e Thrashing
-
-struct MemoryMetrics {
-    int page_faults;
-    int total_references;
-    float page_fault_rate;
-    float effective_access_time;
-    int thrashing_count;
-};
-
-// Calcula tempo efetivo de acesso à memória (simplificado, sem TLB)
-float calculate_effective_access_time(MemoryMetrics* metrics) {
-    const float MEMORY_ACCESS_TIME = 100;  // nanossegundos
-    const float PAGE_FAULT_TIME = 8000000; // nanossegundos (8ms)
-    
-    float pf_rate = metrics->page_fault_rate;
-    
-    // Fórmula simplificada (assumindo TLB com hit rate ~100%):
-    // EAT = (1 - p) * memory_access + p * page_fault_overhead
-    // 
-    // Fórmula completa com TLB:
-    // EAT = TLB_time + TLB_hit_rate * mem_access + 
-    //       TLB_miss_rate * 2 * mem_access + p * page_fault_time
-    float eat = (1 - pf_rate) * MEMORY_ACCESS_TIME + 
-                pf_rate * PAGE_FAULT_TIME;
-    
-    return eat;
-}
-
-// Exemplo de cálculo
-void example_eat() {
-    MemoryMetrics metrics;
-    
-    // Cenário 1: Sistema saudável (1% de page faults)
-    metrics.page_fault_rate = 0.01;
-    printf("Cenário 1 (1%% PF): EAT = %.2f ns\\n", 
-           calculate_effective_access_time(&metrics));
-    // Resultado: ~80,099 ns
-    
-    // Cenário 2: Thrashing (50% de page faults)
-    metrics.page_fault_rate = 0.50;
-    printf("Cenário 2 (50%% PF): EAT = %.2f ns\\n", 
-           calculate_effective_access_time(&metrics));
-    // Resultado: ~4,000,050 ns (50x mais lento!)
-}
-`;
-
-export default function VirtualMemoryPage() {
   return (
     <div className="min-h-screen bg-background">
-    <div className="container mx-auto px-6 py-6">
-      <div className="max-w-6xl mx-auto space-y-8">
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="space-y-8"
-    >
-      <div className="space-y-4">
-        <h1 className="text-4xl font-bold text-os-primary">Gerenciamento de Memória: Memória Virtual</h1>
-        <p className="text-lg text-muted-foreground max-w-4xl">
-          A memória virtual é uma técnica que permite executar processos que requerem mais memória do que a RAM física disponível. 
-          Ela cria a ilusão de um espaço de endereçamento contíguo e potencialmente maior do que a memória física real.
-        </p>
-        <div className="flex gap-2 flex-wrap">
-          <Badge variant="secondary" className="bg-os-primary/20 text-os-primary">Demand Paging</Badge>
-          <Badge variant="secondary" className="bg-os-primary/20 text-os-primary">Page Faults</Badge>
-          <Badge variant="secondary" className="bg-os-primary/20 text-os-primary">Copy-on-Write</Badge>
-          <Badge variant="secondary" className="bg-os-primary/20 text-os-primary">Working Set</Badge>
-          <Badge variant="secondary" className="bg-os-primary/20 text-os-primary">Thrashing</Badge>
+      {/* Hero Section */}
+      <header className="relative overflow-hidden pt-24 pb-20 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600">
+        <div className="absolute inset-0 bg-black/20" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,transparent_0%,rgba(0,0,0,0.4)_100%)]" />
+        
+        {/* Animated grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff12_1px,transparent_1px),linear-gradient(to_bottom,#ffffff12_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+
+        {/* Floating particles */}
+        <div className="absolute inset-0 overflow-hidden">
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 bg-white/30 rounded-full"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`
+              }}
+              animate={{
+                y: [0, -30, 0],
+                opacity: [0.3, 0.8, 0.3],
+              }}
+              transition={{
+                duration: 3 + Math.random() * 2,
+                repeat: Infinity,
+                delay: Math.random() * 2
+              }}
+            />
+          ))}
+        </div>
+
+        <div className="relative container mx-auto px-4 sm:px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center max-w-4xl mx-auto text-white"
+          >
+            <motion.div 
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm mb-6"
+              whileHover={{ scale: 1.05 }}
+            >
+              <HardDrive className="size-5" />
+              <span className="text-sm font-semibold">Gerenciamento de Memória Avançado</span>
+            </motion.div>
+
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+              Memória Virtual
+            </h1>
+
+            <p className="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed">
+              Execução de programas maiores que a RAM física através de paginação sob demanda e swap space
+            </p>
+
+            <div className="flex flex-wrap justify-center gap-3">
+              <Badge variant="secondary" className="bg-white/20 text-white border-white/30 text-sm px-4 py-2">
+                <Cpu className="size-4 mr-2" />
+                Demand Paging
+              </Badge>
+              <Badge variant="secondary" className="bg-white/20 text-white border-white/30 text-sm px-4 py-2">
+                <Database className="size-4 mr-2" />
+                Swap Space
+              </Badge>
+              <Badge variant="secondary" className="bg-white/20 text-white border-white/30 text-sm px-4 py-2">
+                <Activity className="size-4 mr-2" />
+                Page Fault
+              </Badge>
+            </div>
+          </motion.div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-4 sm:px-6 py-12">
+        <div className="max-w-7xl mx-auto">
+          {/* Stats */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16"
+          >
+            {[
+              { label: "Páginas", value: "10", icon: BookOpen },
+              { label: "Simuladores", value: "6", icon: Zap },
+              { label: "Exercícios", value: "20+", icon: GraduationCap },
+              { label: "Animações 3D", value: "4", icon: Layers }
+            ].map((stat, idx) => {
+              const Icon = stat.icon;
+              return (
+                <div key={idx} className="stat-card">
+                  <Card className="p-6 text-center hover:shadow-lg transition-all hover:-translate-y-1 cursor-pointer bg-gradient-to-br from-background to-indigo-500/5">
+                    <Icon className="size-8 mx-auto mb-3 text-indigo-500" />
+                    <div className="text-3xl font-bold mb-1">{stat.value}</div>
+                    <div className="text-sm text-muted-foreground">{stat.label}</div>
+                  </Card>
+                </div>
+              );
+            })}
+          </motion.div>
+
+          {/* Sections Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {sections.map((section, idx) => {
+              const Icon = section.icon;
+              return (
+                <div key={section.id} className="hub-card">
+                  <Link href={section.href}>
+                    <Card className="group p-6 h-full hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 cursor-pointer relative overflow-hidden border-2 hover:border-indigo-500/30">
+                      {/* Gradient background */}
+                      <div className={`absolute inset-0 bg-gradient-to-br ${section.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
+                      
+                      <div className="relative">
+                        {/* Header */}
+                        <div className="flex items-start justify-between mb-4">
+                          <motion.div 
+                            className={`p-3 rounded-xl bg-gradient-to-br ${section.gradient}`}
+                            whileHover={{ scale: 1.1, rotate: 5 }}
+                            transition={{ type: "spring", stiffness: 300 }}
+                          >
+                            <Icon className="size-6 text-white" />
+                          </motion.div>
+                          <Badge className={section.badgeColor}>
+                            {section.badge}
+                          </Badge>
+                        </div>
+
+                        {/* Content */}
+                        <h3 className="text-xl font-bold mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                          {section.title}
+                        </h3>
+                        <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                          {section.description}
+                        </p>
+
+                        {/* Features */}
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {section.features.map((feature, i) => (
+                            <span
+                              key={i}
+                              className="text-xs px-2 py-1 rounded-full bg-muted/50 text-muted-foreground"
+                            >
+                              {feature}
+                            </span>
+                          ))}
+                        </div>
+
+                        {/* Arrow */}
+                        <div className="flex items-center text-sm font-medium text-indigo-600 dark:text-indigo-400 group-hover:translate-x-2 transition-transform">
+                          Explorar
+                          <ArrowRight className="size-4 ml-1" />
+                        </div>
+                      </div>
+                    </Card>
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Key Concepts */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.5 }}
+            className="mt-16"
+          >
+            <Card className="p-8 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/20 dark:to-purple-950/20 border-2 border-indigo-200 dark:border-indigo-800">
+              <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                <Timer className="size-7 text-indigo-600" />
+                Por que Memória Virtual?
+              </h2>
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="size-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold mb-1">Programas Grandes</p>
+                    <p className="text-sm text-muted-foreground">Executar programas maiores que a RAM disponível</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="size-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold mb-1">Multiprogramação</p>
+                    <p className="text-sm text-muted-foreground">Mais processos simultâneos na memória</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="size-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold mb-1">Eficiência</p>
+                    <p className="text-sm text-muted-foreground">Apenas código necessário carregado (demand paging)</p>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+
+          {/* Bottom Navigation */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2 }}
+            className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-16 pt-8 border-t"
+          >
+            <Link href="/os/memoria/segmentacao" className="text-primary hover:underline flex items-center gap-2">
+              ← Voltar para Segmentação
+            </Link>
+            <Link href="/os/memoria/substituicao" className="text-primary hover:underline flex items-center gap-2">
+              Próximo: Substituição de Páginas <ArrowRight className="size-4" />
+            </Link>
+          </motion.div>
         </div>
       </div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-      >
-        <MemoryHierarchyDiagram />
-      </motion.div>
-
-      <Card className="p-6 bg-gradient-to-br from-os-primary/10 to-os-secondary/10 relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none z-0">
-          <div className="absolute -top-1/4 -left-1/4 w-1/2 h-1/2 bg-os-primary/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob" />
-          <div className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-os-secondary/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000" />
-        </div>
-        <CardHeader className="relative z-10">
-          <CardTitle className="text-2xl text-os-primary">Conceitos Fundamentais</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4 text-muted-foreground relative z-10">
-          <h4 className="font-semibold text-foreground text-lg">Por que Memória Virtual?</h4>
-          <ul className="list-disc list-inside ml-4 space-y-2">
-            <li>
-              <strong>Isolamento:</strong> Cada processo tem seu próprio espaço de endereçamento virtual, protegido de outros processos.
-            </li>
-            <li>
-              <strong>Memória Maior que RAM:</strong> Processos podem usar mais memória do que fisicamente disponível (usando disco como backup).
-            </li>
-            <li>
-              <strong>Eficiência:</strong> Apenas as páginas realmente necessárias (working set) ficam na RAM.
-            </li>
-            <li>
-              <strong>Compartilhamento:</strong> Páginas podem ser compartilhadas entre processos (ex: bibliotecas).
-            </li>
-          </ul>
-
-          <Separator className="my-6" />
-
-          <h4 className="font-semibold text-foreground text-lg">Demand Paging (Paginação sob Demanda)</h4>
-          <p>
-            Em vez de carregar o programa inteiro na memória ao iniciar, o sistema carrega páginas apenas quando necessário. 
-            Quando o processo tenta acessar uma página que não está na RAM, ocorre um <strong>page fault</strong>.
-          </p>
-
-          <Alert className="border-blue-500/50 bg-blue-500/10">
-            <Info className="size-4 text-blue-500" />
-            <AlertTitle className="text-blue-400">Processo de Page Fault</AlertTitle>
-            <AlertDescription className="text-blue-300/90">
-              <ol className="list-decimal list-inside mt-2 space-y-1">
-                <li>MMU detecta que o bit Present = 0</li>
-                <li>Gera trap (interrupção) para o kernel</li>
-                <li>Kernel verifica se o acesso é válido</li>
-                <li>Encontra quadro livre (ou substitui página)</li>
-                <li>Carrega página do disco para RAM</li>
-                <li>Atualiza tabela de páginas (Present = 1)</li>
-                <li>Reinicia a instrução que causou o fault</li>
-              </ol>
-            </AlertDescription>
-          </Alert>
-        </CardContent>
-      </Card>
-
-      <Card className="p-6 bg-gradient-to-br from-os-primary/10 to-os-secondary/10">
-        <CardHeader>
-          <CardTitle className="text-2xl text-os-primary">Implementação de Page Fault</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <CodeBlock language="c" title="Tradução de Endereços com Demand Paging">
-            {demandPagingCode}
-          </CodeBlock>
-        </CardContent>
-      </Card>
-
-      <Card className="p-6 bg-gradient-to-br from-os-primary/10 to-os-secondary/10">
-        <CardHeader>
-          <CardTitle className="text-2xl text-os-primary">Copy-on-Write (COW)</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4 text-muted-foreground">
-          <p>
-            Copy-on-Write é uma otimização usada principalmente na chamada de sistema <code className="bg-muted px-1 py-0.5 rounded">fork()</code>. 
-            Quando um processo pai cria um processo filho, em vez de copiar todas as páginas imediatamente, ambos compartilham as mesmas páginas físicas.
-          </p>
-          <p>
-            As páginas são marcadas como <strong>read-only</strong>. Se qualquer um dos processos tentar <strong>escrever</strong> em uma página, 
-            ocorre um <strong>page fault</strong>, e o kernel copia a página naquele momento (daí o nome &quot;copy-on-write&quot;).
-          </p>
-
-          <Alert className="border-green-500/50 bg-green-500/10 mt-4">
-            <CheckCircle2 className="size-4 text-green-500" />
-            <AlertTitle className="text-green-400">Vantagens do COW</AlertTitle>
-            <AlertDescription className="text-green-300/90">
-              <ul className="list-disc list-inside mt-2 space-y-1">
-                <li><strong>Economia de memória:</strong> Não duplica páginas desnecessariamente</li>
-                <li><strong>Fork mais rápido:</strong> Não precisa copiar tudo imediatamente</li>
-                <li><strong>Eficiente para exec():</strong> Se o filho chamar exec(), as páginas do pai nunca serão copiadas</li>
-              </ul>
-            </AlertDescription>
-          </Alert>
-
-          <CodeBlock language="c" title="Implementação de Copy-on-Write" className="mt-6">
-            {copyOnWriteCode}
-          </CodeBlock>
-        </CardContent>
-      </Card>
-
-      <Card className="p-6 bg-gradient-to-br from-os-primary/10 to-os-secondary/10">
-        <CardHeader>
-          <CardTitle className="text-2xl text-os-primary">Working Set e Thrashing</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4 text-muted-foreground">
-          <h4 className="font-semibold text-foreground text-lg">Working Set</h4>
-          <p>
-            O <strong>working set</strong> de um processo é o conjunto de páginas que ele está ativamente usando em um determinado período de tempo (janela Δ). 
-            É a quantidade mínima de páginas que o processo precisa manter na memória para executar eficientemente.
-          </p>
-
-          <div className="bg-muted/30 p-4 rounded-lg mt-4">
-            <p className="font-mono text-sm">
-              WS(t, Δ) = {"{ "} conjunto de páginas referenciadas no intervalo (t-Δ, t) {" }"}
-            </p>
-          </div>
-
-          <h4 className="font-semibold text-foreground text-lg mt-6">Thrashing</h4>
-          <p>
-            <strong>Thrashing</strong> ocorre quando o sistema passa mais tempo lidando com page faults do que executando instruções úteis. 
-            Isso acontece quando a soma dos working sets de todos os processos excede a memória física disponível.
-          </p>
-
-          <Alert className="border-red-500/50 bg-red-500/10 mt-4">
-            <AlertCircle className="size-4 text-red-500" />
-            <AlertTitle className="text-red-400">Sintomas de Thrashing</AlertTitle>
-            <AlertDescription className="text-red-300/90">
-              <ul className="list-disc list-inside mt-2 space-y-1">
-                <li>CPU utilization baixa (sistema esperando I/O de disco)</li>
-                <li>Taxa de page fault extremamente alta (&gt;50%)</li>
-                <li>Disco trabalhando continuamente (swap constante)</li>
-                <li>Throughput do sistema despenca</li>
-                <li>Tempo de resposta aumenta drasticamente</li>
-              </ul>
-            </AlertDescription>
-          </Alert>
-
-          <Alert className="border-yellow-500/50 bg-yellow-500/10 mt-4">
-            <Lightbulb className="size-4 text-yellow-500" />
-            <AlertTitle className="text-yellow-400">Soluções para Thrashing</AlertTitle>
-            <AlertDescription className="text-yellow-300/90">
-              <ul className="list-disc list-inside mt-2 space-y-1">
-                <li><strong>Reduzir grau de multiprogramação:</strong> Suspender alguns processos</li>
-                <li><strong>Adicionar mais RAM:</strong> Aumentar memória física</li>
-                <li><strong>Working Set Model:</strong> Garantir que cada processo tenha seu WS na memória</li>
-                <li><strong>Page Fault Frequency (PFF):</strong> Monitorar e ajustar alocação dinamicamente</li>
-              </ul>
-            </AlertDescription>
-          </Alert>
-
-          <CodeBlock language="c" title="Working Set e Detecção de Thrashing" className="mt-6">
-            {workingSetCode}
-          </CodeBlock>
-
-          <CodeBlock language="c" title="Métricas de Performance" className="mt-6">
-            {thrashingMetricsCode}
-          </CodeBlock>
-        </CardContent>
-      </Card>
-
-      <Card className="p-6 bg-gradient-to-br from-os-primary/10 to-os-secondary/10">
-        <CardHeader>
-          <CardTitle className="text-2xl text-os-primary">Comparação: Tempo de Acesso</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="border-b border-border">
-                  <th className="text-left py-3 px-4 font-semibold text-foreground">Operação</th>
-                  <th className="text-right py-3 px-4 font-semibold text-foreground">Tempo</th>
-                  <th className="text-left py-3 px-4 font-semibold text-foreground">Observação</th>
-                </tr>
-              </thead>
-              <tbody className="text-muted-foreground">
-                <tr className="border-b border-border/50">
-                  <td className="py-3 px-4">Acesso à RAM</td>
-                  <td className="text-right py-3 px-4 font-mono">~100 ns</td>
-                  <td className="py-3 px-4">Memória principal</td>
-                </tr>
-                <tr className="border-b border-border/50">
-                  <td className="py-3 px-4">Acesso ao TLB</td>
-                  <td className="text-right py-3 px-4 font-mono">~1 ns</td>
-                  <td className="py-3 px-4">Cache da MMU</td>
-                </tr>
-                <tr className="border-b border-border/50">
-                  <td className="py-3 px-4">Page Fault (SSD)</td>
-                  <td className="text-right py-3 px-4 font-mono">~100 μs</td>
-                  <td className="py-3 px-4">Disco rápido (1000x mais lento)</td>
-                </tr>
-                <tr className="border-b border-border/50">
-                  <td className="py-3 px-4">Page Fault (HDD)</td>
-                  <td className="text-right py-3 px-4 font-mono">~8 ms</td>
-                  <td className="py-3 px-4 text-red-400">Disco mecânico (80.000x mais lento!)</td>
-                </tr>
-                <tr>
-                  <td className="py-3 px-4">Context Switch</td>
-                  <td className="text-right py-3 px-4 font-mono">~1-10 μs</td>
-                  <td className="py-3 px-4">Troca de processo</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <p className="text-sm text-muted-foreground mt-4 italic">
-            * Por isso é crucial minimizar page faults! Um único page fault custa o equivalente a <strong>milhares</strong> de acessos normais à RAM.
-          </p>
-        </CardContent>
-      </Card>
-
-      <Separator />
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-      >
-        <VirtualMemorySimulator />
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-      >
-        <PageFaultVisualizer />
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
-      >
-        <CopyOnWriteVisualizer />
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-      >
-        <WorkingSetVisualizer />
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.6 }}
-      >
-        <EffectiveAccessTimeCalculator />
-      </motion.div>
-
-      <Card className="p-6 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/30">
-        <CardHeader>
-          <CardTitle className="text-2xl text-blue-400">📝 Exercícios de Fixação</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6 text-muted-foreground">
-          <div className="space-y-2">
-            <h4 className="font-semibold text-foreground">1. Cálculo de Effective Access Time</h4>
-            <div className="text-sm">
-              <p>Dado:</p>
-              <ul className="list-disc list-inside ml-4 mt-2">
-                <li>Tempo de acesso à RAM: 100 ns</li>
-                <li>Tempo de page fault: 8 ms</li>
-                <li>Taxa de page faults: 0.1% (1 em 1000 acessos)</li>
-              </ul>
-              <p className="mt-2">Calcule o tempo efetivo de acesso.</p>
-            </div>
-            <details className="mt-2 p-3 bg-muted/30 rounded-lg">
-              <summary className="cursor-pointer font-semibold text-blue-400">Ver Resposta</summary>
-              <div className="mt-3 space-y-2 text-sm">
-                <p><strong>Fórmula:</strong> EAT = (1 - p) × RAM + p × PageFault</p>
-                <p><strong>Cálculo:</strong></p>
-                <p className="font-mono">EAT = (1 - 0.001) × 100 + 0.001 × 8,000,000</p>
-                <p className="font-mono">EAT = 0.999 × 100 + 0.001 × 8,000,000</p>
-                <p className="font-mono">EAT = 99.9 + 8,000</p>
-                <p className="font-mono text-green-400">EAT = 8,099.9 ns ≈ 8.1 μs</p>
-                <p className="text-yellow-400 mt-2">
-                  📊 Apenas 0.1% de page faults já tornam o acesso 81x mais lento!
-                </p>
-              </div>
-            </details>
-          </div>
-
-          <Separator />
-
-          <div className="space-y-2">
-            <h4 className="font-semibold text-foreground">2. Working Set</h4>
-            <p className="text-sm">
-              Um processo faz os seguintes acessos a páginas (sequência): <br />
-              <code className="bg-muted px-2 py-1 rounded">1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5</code>
-              <br />
-              Com uma janela Δ = 4 acessos, qual é o tamanho máximo do working set?
-            </p>
-            <details className="mt-2 p-3 bg-muted/30 rounded-lg">
-              <summary className="cursor-pointer font-semibold text-blue-400">Ver Resposta</summary>
-              <div className="mt-3 space-y-2 text-sm">
-                <p><strong>Análise por janela de 4 acessos:</strong></p>
-                <ul className="list-disc list-inside ml-4 space-y-1 font-mono text-xs">
-                  <li>[1,2,3,4] → WS = {"{1,2,3,4}"} (tamanho 4)</li>
-                  <li>[2,3,4,1] → WS = {"{1,2,3,4}"} (tamanho 4)</li>
-                  <li>[3,4,1,2] → WS = {"{1,2,3,4}"} (tamanho 4)</li>
-                  <li>[4,1,2,5] → WS = {"{1,2,4,5}"} (tamanho 4)</li>
-                  <li>[1,2,5,1] → WS = {"{1,2,5}"} (tamanho 3)</li>
-                  <li>[2,5,1,2] → WS = {"{1,2,5}"} (tamanho 3)</li>
-                  <li>[5,1,2,3] → WS = {"{1,2,3,5}"} (tamanho 4)</li>
-                  <li>[1,2,3,4] → WS = {"{1,2,3,4}"} (tamanho 4)</li>
-                  <li>[2,3,4,5] → WS = {"{2,3,4,5}"} (tamanho 4)</li>
-                </ul>
-                <p className="text-green-400 mt-3">
-                  <strong>Resposta:</strong> O tamanho máximo do working set é <strong>4 páginas</strong>.
-                </p>
-              </div>
-            </details>
-          </div>
-
-          <Separator />
-
-          <div className="space-y-2">
-            <h4 className="font-semibold text-foreground">3. Copy-on-Write</h4>
-            <p className="text-sm">
-              Processo pai tem 1000 páginas (total de 4 MB com páginas de 4 KB). Ele chama fork() criando um filho. 
-              O filho modifica 10 páginas. Quanto de memória foi economizado usando COW vs. cópia completa?
-            </p>
-            <details className="mt-2 p-3 bg-muted/30 rounded-lg">
-              <summary className="cursor-pointer font-semibold text-blue-400">Ver Resposta</summary>
-              <div className="mt-3 space-y-2 text-sm">
-                <p><strong>Sem COW (cópia completa):</strong></p>
-                <p className="font-mono ml-4">1000 páginas × 4 KB = 4 MB copiados</p>
-                
-                <p className="mt-3"><strong>Com COW:</strong></p>
-                <p className="font-mono ml-4">10 páginas × 4 KB = 40 KB copiados</p>
-                
-                <p className="text-green-400 mt-3">
-                  <strong>Economia:</strong> 4 MB - 40 KB = <strong>3.96 MB (99% de economia!)</strong>
-                </p>
-              </div>
-            </details>
-          </div>
-        </CardContent>
-      </Card>
-    </motion.div>
-    </div>
-    </div>
     </div>
   );
 }
-

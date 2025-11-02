@@ -1,242 +1,322 @@
-# 🎓 OS & DB Academy
+# 🎓 OS Academy - Plataforma Interativa de Sistemas Operacionais
 
-> **Plataforma educacional interativa para estudo de Sistemas Operacionais**
-
-Uma aplicação web moderna e gamificada com simuladores interativos, visualizadores 3D e sistema completo de exercícios para aprendizado de conceitos de Sistemas Operacionais, focando em Gerenciamento de Memória.
+> Aprenda Sistemas Operacionais através de **simuladores visuais 3D**, **exercícios gamificados** e conteúdo acadêmico validado.
 
 [![Next.js](https://img.shields.io/badge/Next.js-15.5-black?logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)](https://www.typescriptlang.org/)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![Deploy](https://img.shields.io/badge/deploy-Vercel-black?logo=vercel)](https://vercel.com)
+[![React](https://img.shields.io/badge/React-19.1-blue?logo=react)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![Three.js](https://img.shields.io/badge/Three.js-0.180-black?logo=three.js)](https://threejs.org/)
 
 ---
 
-## ✨ Features Principais
+## ✨ **Destaques**
 
-### 🎮 Sistema de Exercícios Gamificado
-- **25+ exercícios** práticos cobrindo todos os conceitos fundamentais
-- Sistema de **pontuação e progresso** em tempo real
-- **Filtros avançados** por categoria e dificuldade
-- Feedback instantâneo com **explicações detalhadas**
-- **Dicas contextuais** para cada questão
-- Dashboard de **estatísticas** e progresso por categoria
+### 🎮 **12 Simuladores Interativos**
+- **Paginação 2D/3D** - Tradução de endereços com visualização em tempo real
+- **TLB 3D** - Translation Lookaside Buffer com partículas animadas
+- **Memória Virtual** - Demand paging, page faults e working set
+- **Algoritmos de Substituição** - FIFO, LRU, Clock, Optimal + Belady
+- **Segmentação** - Tabelas de segmentos e proteção de memória
+- **Copy-on-Write** - Visualização do mecanismo COW
+- **EAT Calculator** - Effective Access Time interativo
+- **Memory Hierarchy** - Hierarquia completa de memória
 
-### 🔬 12 Simuladores Interativos
-1. **VirtualMemorySimulator** - Demand Paging em ação
-2. **PageFaultVisualizer** - Visualização de page faults
-3. **WorkingSetVisualizer** - Working set e detecção de thrashing
-4. **CopyOnWriteVisualizer** - Mecanismo COW do fork()
-5. **EffectiveAccessTimeCalculator** - Cálculo de EAT interativo
-6. **MemoryHierarchyDiagram** - Hierarquia completa de memória
-7. **PagingSimulator** - Tradução de endereços
-8. **PagingVisualizer3D** - Visualização 3D de paginação
-9. **TLBVisualizer3D** - TLB com partículas animadas
-10. **PageReplacementComparator** - 4 algoritmos lado a lado
-11. **BeladyAnomalyDemonstrator** - Anomalia interativa
-12. **SegmentationSimulator** - Segmentação completa
+### 📚 **25+ Exercícios Gamificados**
+- Sistema de pontuação e progresso
+- Filtros por categoria e dificuldade
+- Feedback instantâneo com explicações
+- Dashboard de performance
 
-### 🎨 UX Premium
-- **Smooth scroll** com Lenis (1.2s duration)
-- **Navegação instantânea** (150ms loading)
-- **Validação visual** em todos os inputs
-- **Tooltips informativos** com exemplos clicáveis
-- **Animações 60fps** com Framer Motion
-- **Design system** consistente com Tailwind + Shadcn/ui
-- **Tema dark** otimizado
-
-### 📊 Visualizadores 3D
-- **React Three Fiber** para renderização performática
-- TLB com **partículas de dados** animadas
-- Tabela de páginas em **3D interativa**
-- Memory Hierarchy com **gradientes responsivos**
+### 🎨 **UX Premium**
+- Animações buttery smooth (60fps constante)
+- Dark mode nativo
+- Smooth scroll com Lenis
+- Navegação instantânea
+- Design system consistente
 
 ---
 
-## 🚀 Quick Start
+## 🚀 **Quick Start**
 
 ### Pré-requisitos
-- Node.js 18.x ou superior
-- npm ou yarn
+```bash
+Node.js 18+ | npm ou yarn
+```
 
 ### Instalação
 
 ```bash
 # Clone o repositório
-git clone https://github.com/eduardogiacomelli/study-academy.git
-cd study-academy
+git clone https://github.com/seu-usuario/os-academy.git
+cd os-academy
 
-# Instale as dependências
+# Instale dependências
 npm install
 
 # Inicie o servidor de desenvolvimento
 npm run dev
 ```
 
-Abra [http://localhost:3000](http://localhost:3000) no seu navegador.
+Acesse [http://localhost:3000](http://localhost:3000)
 
 ### Build para Produção
 
 ```bash
-# Criar build otimizado
 npm run build
-
-# Iniciar servidor de produção
 npm start
 ```
 
 ---
 
-## 📚 Estrutura do Projeto
+## 📁 **Estrutura do Projeto**
 
 ```
-os-db-academy/
+os-academy/
 ├── app/
-│   ├── os/
-│   │   ├── exercicios/          # Sistema de exercícios gamificado
-│   │   └── memoria/
-│   │       ├── paginacao/       # Simuladores de paginação + TLB 3D
-│   │       ├── segmentacao/     # Simulador de segmentação
-│   │       ├── substituicao/    # Algoritmos de substituição
-│   │       └── virtual/         # 6 simuladores de memória virtual
-│   ├── layout.tsx               # Layout raiz com smooth scroll
-│   └── page.tsx                 # Landing page animada
+│   ├── page.tsx                    # Landing page animada
+│   ├── layout.tsx                  # Layout global + providers
+│   ├── globals.css                 # Estilos globais + Tailwind
+│   │
+│   └── os/
+│       ├── page.tsx                # Dashboard de Sistemas Operacionais
+│       ├── layout.tsx              # Layout OS
+│       │
+│       ├── exercicios/
+│       │   └── page.tsx            # 25+ exercícios gamificados
+│       │
+│       └── memoria/
+│           ├── paginacao/          # 3 simuladores + teoria
+│           ├── segmentacao/        # Simulador de segmentação
+│           ├── virtual/            # 6 simuladores de memória virtual
+│           └── substituicao/       # 4 algoritmos de substituição
+│
 ├── components/
-│   ├── exercises/               # Componentes de exercícios
-│   │   ├── ExerciseCard.tsx    # Card gamificado com animações
-│   │   ├── ExerciseFilters.tsx # Filtros funcionais
-│   │   └── ProgressDashboard.tsx # Dashboard de progresso
-│   ├── os/                      # 12 simuladores de SO
-│   ├── shared/                  # Componentes reutilizáveis
-│   │   ├── GlobalLoading.tsx   # Loading instantâneo
-│   │   ├── SmoothScroll.tsx    # Lenis integration
-│   │   └── ValidatedInput.tsx  # Input com validação visual
-│   └── ui/                      # Shadcn/ui components
+│   ├── os/                         # 12 simuladores de SO
+│   │   ├── PagingSimulator.tsx
+│   │   ├── PagingVisualizer3D.tsx
+│   │   ├── TLBVisualizer3D.tsx
+│   │   ├── SegmentationSimulator.tsx
+│   │   ├── VirtualMemorySimulator.tsx
+│   │   ├── PageFaultVisualizer.tsx
+│   │   ├── WorkingSetVisualizer.tsx
+│   │   ├── CopyOnWriteVisualizer.tsx
+│   │   ├── EffectiveAccessTimeCalculator.tsx
+│   │   ├── MemoryHierarchyDiagram.tsx
+│   │   ├── PageReplacementComparator.tsx
+│   │   └── BeladyAnomalyDemonstrator.tsx
+│   │
+│   ├── exercises/                  # Sistema de exercícios
+│   │   ├── ExerciseCard.tsx
+│   │   ├── ExerciseFilters.tsx
+│   │   └── ProgressDashboard.tsx
+│   │
+│   ├── shared/                     # Componentes reutilizáveis
+│   │   ├── SmoothScroll.tsx       # Lenis integration
+│   │   ├── GlobalLoading.tsx      # Loading com prefetch
+│   │   ├── CollapsibleNav.tsx     # Navegação hamburger
+│   │   ├── ValidatedInput.tsx     # Input com validação visual
+│   │   ├── CodeBlock.tsx
+│   │   ├── ComparisonTable.tsx
+│   │   ├── EducationalTooltip.tsx
+│   │   └── PageLayout.tsx
+│   │
+│   └── ui/                         # Shadcn/ui components
+│
 ├── data/
-│   └── exercises-database.ts    # Banco de dados de exercícios
+│   └── exercises-database.ts       # Banco de 25+ exercícios
+│
 └── lib/
-    └── utils/                   # Utilitários e helpers
+    └── utils.ts                    # Utilidades
 ```
 
 ---
 
-## 🎯 Conteúdo Acadêmico
+## 🛠️ **Stack Tecnológica**
 
-### Baseado em Referências de Qualidade
-- **Tanenbaum** - Sistemas Operacionais Modernos (Cap. 3 completo)
-- **Silberschatz** - Fundamentos de SO (Cap. 9)
-- **INE5611** - Lista de exercícios (UFSC)
+### **Core**
+- **Next.js 15.5** - App Router + RSC
+- **React 19.1** - UI library
+- **TypeScript 5** - Type safety
+- **Tailwind CSS 3.4** - Styling
 
-### Tópicos Cobertos
+### **Animações**
+- **Framer Motion 12** - Animações 2D
+- **Lenis 1.1** - Smooth scroll
+- **GSAP 3.13** - Animações avançadas (em implementação)
+
+### **3D Graphics**
+- **Three.js 0.180** - WebGL rendering
+- **React Three Fiber 9.4** - React renderer para Three.js
+- **@react-three/drei 10.7** - Helpers 3D
+
+### **UI Components**
+- **Shadcn/ui** - Component library
+- **Radix UI** - Primitives acessíveis
+- **Lucide React** - Ícones
+- **Sonner** - Toasts elegantes
+
+---
+
+## 📚 **Conteúdo Acadêmico**
+
+### **Baseado em:**
+- **Tanenbaum** - Modern Operating Systems (Cap. 3)
+- **Silberschatz** - Operating System Concepts (Cap. 9)
+- **INE5611 (UFSC)** - Listas de exercícios validadas
+
+### **Tópicos Cobertos:**
 - ✅ Conceitos Básicos de Memória
 - ✅ Hierarquia de Memória
 - ✅ MMU e Tradução de Endereços
-- ✅ Paginação (completa)
+- ✅ Paginação (simples e multinível)
 - ✅ TLB (Translation Lookaside Buffer)
 - ✅ Segmentação
 - ✅ Memória Virtual
 - ✅ Demand Paging
-- ✅ Page Faults
+- ✅ Page Faults e Page Fault Handling
 - ✅ Algoritmos de Substituição (FIFO, LRU, Clock, Optimal)
 - ✅ Anomalia de Belady
 - ✅ Working Set e Thrashing
-- ✅ Copy-on-Write (COW)
+- ✅ Copy-on-Write
 - ✅ Effective Access Time (EAT)
-- ✅ Particionamento (Estático/Dinâmico)
+- ✅ Fragmentação (Interna e Externa)
 
 ---
 
-## 🛠️ Tech Stack
+## 🎯 **Features Principais**
 
-### Frontend
-- **Next.js 15** - React framework com App Router
-- **TypeScript** - Type safety
-- **Tailwind CSS** - Utility-first CSS
-- **Shadcn/ui** - Component library
-- **Framer Motion** - Animações premium
-- **React Three Fiber** - 3D graphics
-- **Lenis** - Smooth scroll
+### **1. Simuladores Interativos**
+Cada simulador permite:
+- ⚙️ Configuração de parâmetros
+- ▶️ Execução passo a passo
+- 📊 Visualização em tempo real
+- 📈 Métricas e estatísticas
+- 💡 Tooltips educacionais
+- 🎨 Animações suaves (60fps)
 
-### Performance
-- **Code Splitting** automático
-- **Static Site Generation** (SSG)
-- **Lazy Loading** de componentes 3D
-- **Bundle otimizado** (~102KB shared)
-- **60fps** animations
-- **Build time**: ~6.5s
+### **2. Exercícios Gamificados**
+- 🎯 25+ questões validadas
+- 📊 Sistema de pontuação (590+ pts)
+- 🏆 Dashboard de progresso
+- 🎓 Explicações detalhadas
+- 💡 Dicas contextuais
+- 🔄 Feedback instantâneo
+
+### **3. Visualizações 3D**
+- 🎮 TLB com partículas animadas
+- 🗂️ Tabela de páginas 3D interativa
+- 🔄 Transições animadas
+- 🎨 Materiais e iluminação realista
+- 🖱️ Controles orbit intuitivos
 
 ---
 
-## 📈 Estatísticas do Projeto
+## ⚡ **Performance**
+
+### **Build Stats**
+```
+Route                          Size       First Load JS
+├ /                            15.2 KB    115 KB
+├ /os                          12.8 KB    113 KB
+├ /os/exercicios               14.1 KB    114 KB
+├ /os/memoria/paginacao        18.5 KB    119 KB
+└ Total First Load JS          ~115 KB
+```
+
+### **Otimizações**
+- ✅ Code splitting automático
+- ✅ Static Site Generation (SSG)
+- ✅ Lazy loading de componentes 3D
+- ✅ Image optimization
+- ✅ Bundle otimizado
+- ✅ Prefetch de rotas
+- ✅ 60fps em animações
+- ✅ Smooth scroll nativo
+
+---
+
+## 🎨 **Design System**
+
+### **Cores**
+```typescript
+os: {
+  primary: "hsl(217, 91%, 60%)",    // Blue
+  secondary: "hsl(187, 71%, 50%)",  // Cyan
+}
+```
+
+### **Animações**
+- Framer Motion para transições
+- GPU-accelerated transforms
+- Lenis para smooth scroll
+- React Spring para física
+- Three.js para 3D
+
+---
+
+## 📊 **Estatísticas**
 
 ```
-📁 50+ arquivos TS/TSX
-📝 ~12,000 linhas de código
+📝 50+ arquivos TS/TSX
+🧮 ~12,000 linhas de código
 🎮 12 simuladores interativos
 📚 25+ exercícios gamificados
 🎨 3 visualizadores 3D
-🏆 430+ pontos disponíveis
+🏆 590+ pontos disponíveis
 ⚡ 60fps constante
-✅ 0 erros de build
+✅ 0 erros TypeScript
+🚀 Build: ~6.5s
 ```
 
 ---
 
-## 🎨 Screenshots
-
-### Landing Page
-Landing page moderna com animações e gradientes.
-
-### Simuladores Interativos
-12 simuladores funcionais com feedback em tempo real.
-
-### Sistema de Exercícios
-Gamificação completa com pontos, badges e progresso.
-
-### Visualizadores 3D
-TLB, Paging e Memory Hierarchy em 3D performático.
-
----
-
-## 🤝 Contribuindo
+## 🤝 **Contribuindo**
 
 Contribuições são bem-vindas! Para contribuir:
 
 1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
+2. Crie uma branch (`git checkout -b feature/NovaFeature`)
+3. Commit suas mudanças (`git commit -m 'Add: nova feature'`)
+4. Push para a branch (`git push origin feature/NovaFeature`)
 5. Abra um Pull Request
 
 ---
 
-## 📝 Roadmap
+## 📝 **Roadmap**
 
-### Módulo de Sistemas Operacionais ✅
-- [x] Gerenciamento de Memória completo
-- [x] Sistema de exercícios gamificado
-- [x] Simuladores interativos
-- [x] Visualizadores 3D
+### ✅ **Completo**
+- [x] Módulo de Gerenciamento de Memória
+- [x] 12 Simuladores interativos
+- [x] 25+ Exercícios gamificados
+- [x] Visualizações 3D
+- [x] Sistema de pontuação
+- [x] Dark mode
 
-### Próximas Features 🚧
+### 🚧 **Em Desenvolvimento**
 - [ ] Módulo de Processos e Threads
-- [ ] Módulo de Sincronização
-- [ ] Módulo de Deadlocks
-- [ ] Módulo de Sistemas de Arquivos
-- [ ] Módulo de Bancos de Dados (SQL/NoSQL)
-- [ ] Sistema de autenticação
+- [ ] Escalonamento de CPU
+- [ ] Sincronização e Deadlock
+- [ ] Sistemas de Arquivos
+- [ ] Integração com GSAP ScrollTrigger
+- [ ] Animações avançadas
+
+### 📋 **Planejado**
+- [ ] Autenticação de usuários
 - [ ] Salvamento de progresso em nuvem
 - [ ] Leaderboard global
-- [ ] Modo multiplayer competitivo
+- [ ] Certificados de conclusão
+- [ ] Modo competitivo
+- [ ] Mobile app (PWA)
 
 ---
 
-## 📄 Licença
+## 📄 **Licença**
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+Este projeto está sob a licença MIT. Veja [LICENSE](LICENSE) para mais detalhes.
 
 ---
 
-## 👨‍💻 Autor
+## 👨‍💻 **Autor**
 
 **Eduardo Giacomelli**
 
@@ -245,27 +325,26 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ---
 
-## 🙏 Agradecimentos
+## 🙏 **Agradecimentos**
 
 - **UFSC** - Universidade Federal de Santa Catarina
 - **INE5611** - Disciplina de Sistemas Operacionais
 - **Prof. Eduardo Camilo Inacio** - Materiais de referência
-- **Prof. Cristian Koliver / Cristina Meinhardt** - Excelentes aulas expositivas.
 - **Tanenbaum** - "Sistemas Operacionais Modernos"
 - **Comunidade Open Source** - Por todas as bibliotecas incríveis
 
 ---
 
-## ⭐ Dê uma Estrela!
+## ⭐ **Star o Projeto!**
 
-Se este projeto te ajudou nos estudos, considere dar uma ⭐ no repositório!
+Se este projeto te ajudou nos estudos, considere dar uma ⭐!
 
 ---
 
 <div align="center">
 
-**Desenvolvido para estudantes e professores de Ciência da Computação e Sistemas de Informação**
+**Desenvolvido com ❤️ para estudantes de Ciência da Computação**
 
-[🚀 Deploy](https://study-academy.vercel.app) · [📚 Docs](https://github.com/eduardogiacomelli/study-academy/wiki) · [🐛 Report Bug](https://github.com/eduardogiacomelli/study-academy/issues) · [✨ Request Feature](https://github.com/eduardogiacomelli/study-academy/issues)
+[🚀 Deploy](https://os-academy.vercel.app) · [📚 Docs](https://github.com/eduardogiacomelli/os-academy/wiki) · [🐛 Report Bug](https://github.com/eduardogiacomelli/os-academy/issues)
 
 </div>

@@ -1,16 +1,15 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
-  Cpu, Database, ArrowRight, BookOpen, Zap, Target, 
+  Cpu, ArrowRight, Zap, Target, 
   Sparkles, Play, CheckCircle2, Code2, Brain, Rocket,
   Monitor, Activity, Layers
 } from "lucide-react";
-import { useRef } from "react";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -71,18 +70,8 @@ const stats = [
 ];
 
 export default function Home() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"]
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
-
   return (
-    <main ref={containerRef} className="min-h-screen bg-background relative overflow-hidden">
+    <main className="min-h-screen bg-background relative overflow-hidden">
       {/* Animated Background Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
       
@@ -116,10 +105,7 @@ export default function Home() {
 
       <div className="relative z-10">
         {/* Hero Section */}
-        <motion.section 
-          className="container mx-auto px-4 pt-32 pb-20 text-center"
-          style={{ y, opacity, scale }}
-        >
+        <section className="container mx-auto px-4 pt-32 pb-20 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -145,11 +131,9 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <span className="bg-gradient-to-r from-os-primary via-purple-500 to-db-primary bg-clip-text text-transparent">
-                OS & DB
+              <span className="bg-gradient-to-r from-os-primary to-cyan-500 bg-clip-text text-transparent">
+                OS Academy
               </span>
-              <br />
-              <span className="text-foreground">Academy</span>
             </motion.h1>
             
             <motion.p 
@@ -158,8 +142,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              Domine <span className="text-os-primary font-semibold">Sistemas Operacionais</span> e{" "}
-              <span className="text-db-primary font-semibold">Banco de Dados</span> através de{" "}
+              Domine <span className="text-os-primary font-semibold">Sistemas Operacionais</span> através de{" "}
               <span className="relative">
                 <span className="relative z-10">simuladores visuais interativos</span>
                 <motion.span 
@@ -213,7 +196,7 @@ export default function Home() {
                   <div className="flex justify-center mb-2 text-primary">
                     {stat.icon}
                   </div>
-                  <div className="text-3xl font-bold mb-1 bg-gradient-to-r from-os-primary to-db-primary bg-clip-text text-transparent">
+                  <div className="text-3xl font-bold mb-1 bg-gradient-to-r from-os-primary to-cyan-500 bg-clip-text text-transparent">
                     {stat.value}
                   </div>
                   <div className="text-sm text-muted-foreground">{stat.label}</div>
@@ -221,7 +204,7 @@ export default function Home() {
               ))}
             </motion.div>
           </motion.div>
-        </motion.section>
+        </section>
 
         {/* Features Section */}
         <section className="container mx-auto px-4 py-20">
@@ -252,7 +235,7 @@ export default function Home() {
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, amount: 0.3 }}
           >
             {features.map((feature, index) => (
               <motion.div
@@ -279,13 +262,13 @@ export default function Home() {
 
         {/* Main Cards Section */}
         <section className="container mx-auto px-4 py-20">
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="max-w-4xl mx-auto">
             {/* OS Card */}
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true, amount: 0.3 }}
               whileHover={{ scale: 1.02 }}
             >
               <Link href="/os">
@@ -334,60 +317,17 @@ export default function Home() {
               </Link>
             </motion.div>
 
-            {/* DB Card */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              whileHover={{ scale: 1.02 }}
-            >
-              <Card className="group relative overflow-hidden p-8 h-full bg-gradient-to-br from-db-primary/10 to-db-secondary/10 border-2 border-db-primary/20 hover:border-db-primary/50 transition-all hover:shadow-2xl hover:shadow-db-primary/20 opacity-60">
-                {/* Animated background */}
-                <motion.div 
-                  className="absolute inset-0 bg-gradient-to-br from-db-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"
-                />
-                
-                <div className="relative z-10">
-                  <motion.div
-                    className="w-16 h-16 rounded-2xl bg-gradient-to-br from-db-primary to-db-secondary flex items-center justify-center text-white mb-6 shadow-lg shadow-db-primary/50"
-                    whileHover={{ rotate: [0, -10, 10, -10, 0] }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <Database className="size-8" />
-                  </motion.div>
-                  
-                  <h3 className="text-3xl font-bold mb-3 group-hover:text-db-primary transition-colors">
-                    Banco de Dados
-                  </h3>
-                  
-                  <p className="text-muted-foreground mb-6">
-                    Aprenda SQL, normalização, transações, índices e otimização de queries com editores SQL interativos e visualizadores de queries.
-                  </p>
-                  
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    <Badge variant="secondary" className="bg-muted/50 text-muted-foreground">
-                      Em breve
-                    </Badge>
-                  </div>
-                  
-                  <div className="flex items-center text-muted-foreground font-semibold">
-                    Em desenvolvimento
-                  </div>
-                </div>
-              </Card>
-            </motion.div>
           </div>
         </section>
 
         {/* CTA Section */}
         <section className="container mx-auto px-4 py-20">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-os-primary via-purple-600 to-db-primary p-12 text-center text-white"
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true, amount: 0.3 }}
+            className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-os-primary via-cyan-600 to-blue-700 p-12 text-center text-white"
           >
             <motion.div
               className="absolute inset-0 opacity-20"
