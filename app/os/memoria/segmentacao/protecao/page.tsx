@@ -623,8 +623,8 @@ export default function ProtecaoPage() {
                         </strong>
                       </p>
                       <ul className="text-sm space-y-1 text-muted-foreground">
-                        <li>• Tanenbaum - <em>"Modern Operating Systems"</em> (Cap. 3.3)</li>
-                        <li>• Silberschatz - <em>"Operating System Concepts"</em> (Cap. 9)</li>
+                        <li>• Tanenbaum - <em>&quot;Modern Operating Systems&quot;</em> (Cap. 3.3)</li>
+                        <li>• Silberschatz - <em>&quot;Operating System Concepts&quot;</em> (Cap. 9)</li>
                       </ul>
                     </div>
                   </div>

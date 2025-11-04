@@ -24,36 +24,50 @@ export default function ExerciciosPage() {
       id: 1,
       categoria: "Conceitual",
       dificuldade: "Fácil",
-      questao: "Explique a diferença entre memória virtual e memória física. Por que a memória virtual é necessária?",
-      resposta: "Memória física (RAM) é a memória real instalada no computador. Memória virtual é uma abstração que dá a cada processo a ilusão de ter um espaço de endereçamento contínuo e privado, independente da RAM disponível. É necessária para: (1) Permitir programas maiores que a RAM, (2) Isolar processos, (3) Facilitar multiprogramação, (4) Simplificar desenvolvimento."
+      questao: "Explique o que é memória virtual, destacando sua principal motivação, princípio básico e benefícios.",
+      resposta: "Memória virtual é uma técnica que permite que processos executem mesmo que não estejam completamente carregados na memória física. \n\nPRINCIPAL MOTIVAÇÃO: Permitir execução de programas maiores que a RAM disponível, facilitando multiprogramação.\n\nPRINCÍPIO BÁSICO: Cada processo tem um espaço de endereçamento virtual separado, que é mapeado para a memória física através de páginas. O sistema operacional gerencia esse mapeamento dinamicamente.\n\nBENEFÍCIOS:\n1. Programas maiores que RAM podem executar\n2. Isolamento entre processos (segurança)\n3. Multiprogramação eficiente\n4. Simplificação do desenvolvimento (processos veem memória contínua)\n5. Compartilhamento de código entre processos\n6. Proteção de memória (cada processo tem seu espaço privado)"
     },
     {
       id: 2,
-      categoria: "Cálculo",
-      dificuldade: "Médio",
-      questao: "Um sistema tem 4 GB de RAM e usa páginas de 4 KB. Quantos frames físicos existem? Se usa paginação de 2 níveis com 10 bits por nível, quantas entradas há em cada tabela?",
-      resposta: "Frames = 4GB / 4KB = (2^32) / (2^12) = 2^20 = 1.048.576 frames\n\nPara 2 níveis com 10 bits cada:\n- Page Directory: 2^10 = 1024 entradas\n- Page Tables: 1024 entradas cada\n- Offset: 32 - 10 - 10 = 12 bits (confirma 4KB pages)"
+      categoria: "Conceitual",
+      dificuldade: "Fácil",
+      questao: "O que é o princípio da localidade de referência?",
+      resposta: "O princípio da localidade de referência afirma que programas tendem a acessar um conjunto relativamente pequeno de páginas durante qualquer período de tempo.\n\nExistem dois tipos:\n\n1. LOCALIDADE TEMPORAL: Dados/instruções acessados recentemente têm alta probabilidade de serem acessados novamente em breve.\n   Exemplo: Loops executam as mesmas instruções repetidamente.\n\n2. LOCALIDADE ESPACIAL: Dados/instruções próximos aos recentemente acessados têm alta probabilidade de serem acessados.\n   Exemplo: Arrays são acessados sequencialmente.\n\nIMPORTÂNCIA: Este princípio justifica o uso de memória virtual e cache. Apenas uma pequena parte do programa precisa estar na RAM a qualquer momento, permitindo que programas maiores que a RAM executem eficientemente."
     },
     {
       id: 3,
-      categoria: "Working Set",
+      categoria: "Conceitual",
       dificuldade: "Médio",
-      questao: "Dada a sequência de referências: 1,2,3,4,1,2,5,1,2,3,4,5. Calcule W(10,4) e W(10,6).",
-      resposta: "W(10,4) = páginas em [6,10] = {5,1,2,3,4} → |W| = 5 páginas\n\nW(10,6) = páginas em [4,10] = {1,2,5,3,4} → |W| = 5 páginas\n\nNeste caso, Δ=4 e Δ=6 dão o mesmo resultado, mas geralmente Δ maior captura mais páginas."
+      questao: "Apresente um exemplo prático de exploração de localidade temporal e outro de localidade espacial.",
+      resposta: "LOCALIDADE TEMPORAL - Exemplo:\n\nfor (int i = 0; i < 1000; i++) {\n    sum += array[i];  // Instrução 'sum +=' executada 1000x\n}\n\nA mesma instrução 'sum +=' é acessada repetidamente. Uma vez carregada na memória, é reutilizada muitas vezes.\n\nLOCALIDADE ESPACIAL - Exemplo:\n\nint arr[10000];\nfor (int i = 0; i < 10000; i++) {\n    arr[i] = i;  // Elementos adjacentes acessados sequencialmente\n}\n\nQuando arr[0] é acessado, arr[1], arr[2], etc. (que estão na mesma página) têm alta probabilidade de serem acessados em seguida. A página inteira é carregada, aproveitando múltiplos acessos."
     },
     {
       id: 4,
-      categoria: "EAT",
-      dificuldade: "Difícil",
-      questao: "Calcule o EAT para: TLB hit = 98%, TLB time = 1ns, Memory time = 100ns, 4-level paging, Page fault = 0.01%, PF time = 10ms.",
-      resposta: "TLB hit: 1ns + 100ns = 101ns\nTLB miss: 4×100ns + 100ns = 500ns\n\nEAT sem PF = 0.98×101 + 0.02×500 = 98.98 + 10 = 108.98ns\n\nEAT total = 0.9999×108.98 + 0.0001×10,000,000 = 108.97 + 1000 = 1108.97ns ≈ 1.1µs\n\nOverhead: 1108.97/100 = 11.09x"
+      categoria: "Conceitual",
+      dificuldade: "Médio",
+      questao: "Paginação sob demanda é uma forma de implementação de memória virtual baseada no mecanismo de paginação. Neste contexto, avalie as afirmações:\nA) Neste modelo, apenas páginas efetivamente acessadas pelo processo são carregadas na memória física.\nB) Uma tabela de páginas contendo para cada entrada apenas o número da página e o número do quadro é suficiente para implementar paginação sob demanda.\nC) Page Fault refere-se a um tipo de interrupção gerado para sinalizar que a memória física está totalmente ocupada e não há lugar para novas páginas.\nD) O bit \"Referenciado\" é utilizado na tabela de páginas para controlar as páginas que estão carregadas na memória física.",
+      resposta: "A) VERDADEIRO (V)\nEm paginação sob demanda, páginas só são carregadas quando acessadas pela primeira vez. Isso economiza memória e permite programas maiores que a RAM.\n\nB) FALSO (F)\nUma tabela de páginas para paginação sob demanda precisa de mais informações:\n- Bit de validade (presente/ausente na memória)\n- Bit de modificação (dirty bit)\n- Bit de referência (para algoritmos de substituição)\n- Permissões (read/write/execute)\n- Endereço do quadro (quando presente)\n\nC) FALSO (F)\nPage Fault é uma interrupção gerada quando um processo tenta acessar uma página que não está na memória física. Pode ocorrer mesmo quando há espaço disponível na RAM. O sistema então carrega a página do disco.\n\nD) FALSO (F)\nO bit \"Referenciado\" (R) é usado para rastrear quais páginas foram acessadas recentemente, útil para algoritmos de substituição como LRU. O bit que controla se uma página está carregada é o bit de \"Validade\" ou \"Presente\" (P)."
     },
     {
       id: 5,
-      categoria: "Page Replacement",
+      categoria: "Conceitual",
       dificuldade: "Médio",
-      questao: "Para a sequência 1,2,3,4,1,2,5,1,2,3,4,5 com 3 frames, quantos page faults ocorrem com FIFO? E com LRU?",
-      resposta: "FIFO: [1] [1,2] [1,2,3] [2,3,4] [3,4,1] [4,1,2] [1,2,5] [2,5,1] [5,1,2] [1,2,3] [2,3,4] [3,4,5]\nPage Faults = 9\n\nLRU: [1] [1,2] [1,2,3] [1,2,4] (3 saiu) [1,2,4] (1 usado) [1,2,4] (2 usado) [1,2,5] (4 saiu) [1,2,5] [1,2,5] [1,2,3] (5 saiu) [1,2,4] (3 saiu) [2,4,5] (1 saiu)\nPage Faults = 8 (LRU melhor!)"
+      questao: "Descreva os passos necessários para tratamento de um page fault.",
+      resposta: "Quando um page fault ocorre, o sistema operacional executa os seguintes passos:\n\n1. DETECÇÃO: A MMU (Memory Management Unit) detecta que o bit de validade na tabela de páginas está desativado, gerando uma interrupção.\n\n2. SALVAR CONTEXTO: O SO salva o estado do processo (registradores, PC, etc.) para poder retomar depois.\n\n3. VERIFICAR ENDEREÇO: Verifica se o endereço virtual é válido (dentro dos limites do processo). Se inválido → Segmentation Fault.\n\n4. LOCALIZAR PÁGINA: Determina onde a página está armazenada (disco swap ou arquivo executável).\n\n5. VERIFICAR ESPAÇO: Verifica se há frames livres na memória física. Se não houver, executa algoritmo de substituição.\n\n6. SUBSTITUIÇÃO (se necessário): Escolhe uma vítima, escreve no disco se foi modificada (dirty), marca como ausente.\n\n7. CARREGAR PÁGINA: Lê a página do disco para o frame físico escolhido.\n\n8. ATUALIZAR TABELA: Atualiza a tabela de páginas: marca como presente, define número do frame, ativa bits de permissão.\n\n9. RETOMAR EXECUÇÃO: Restaura o contexto do processo e retoma a instrução que causou o fault.\n\nTEMPO TÍPICO: ~10ms (milissegundos) - muito mais lento que acesso à RAM (~100ns)."
+    },
+    {
+      id: 6,
+      categoria: "Cálculo",
+      dificuldade: "Difícil",
+      questao: "Em um sistema computacional, o tempo médio de acesso à memória é tam = 150 ns e o tempo médio para tratamento de um page fault é tpf = 10 ms. Para uma taxa de um page fault para cada 500 acessos, o tempo efetivo de acesso à memória é te = 20,150 µs. Qual taxa de page fault é necessária para se obter um tempo efetivo de te = 10,150 µs?",
+      resposta: "FÓRMULA DO TEMPO EFETIVO:\nte = (1 - p) × tam + p × tpf\n\nOnde:\n- te = tempo efetivo de acesso\n- tam = tempo de acesso à memória = 150 ns = 0,15 µs\n- tpf = tempo de page fault = 10 ms = 10.000 µs\n- p = taxa de page fault (probabilidade)\n\nDADOS INICIAIS:\np1 = 1/500 = 0,002 = 0,2%\nte1 = 20,150 µs\n\nVERIFICAÇÃO:\nte1 = (1 - 0,002) × 0,15 + 0,002 × 10.000\nte1 = 0,998 × 0,15 + 20\nte1 = 0,1497 + 20 = 20,1497 µs ✓\n\nPROBLEMA:\nQueremos te2 = 10,150 µs\nQual p2?\n\n10,150 = (1 - p2) × 0,15 + p2 × 10.000\n10,150 = 0,15 - 0,15p2 + 10.000p2\n10,150 = 0,15 + 9.999,85p2\n10,149,85 = 9.999,85p2\n\np2 = 10,149,85 / 9.999,85\np2 ≈ 1,015\n\nComo p2 > 1, isso é impossível! Vamos recalcular:\n\n10,150 = 0,15 + 9.999,85p2\n10,149,85 = 9.999,85p2\np2 = 1,015 (impossível)\n\nRevisando: se te = 10,150 µs e tam = 0,15 µs, então:\n10,150 = (1-p) × 0,15 + p × 10.000\n10,150 = 0,15 - 0,15p + 10.000p\n10,149,85 = 9.999,85p\np ≈ 0,001015 ≈ 1/985\n\nRESPOSTA: Aproximadamente 1 page fault para cada 985 acessos (p ≈ 0,1015%)"
+    },
+    {
+      id: 7,
+      categoria: "Conceitual",
+      dificuldade: "Difícil",
+      questao: "Descreva o funcionamento dos seguintes algoritmos de substituição de páginas:\n(a) FIFO\n(b) Segunda Chance\n(c) Relógio\n(d) NRU\n(e) LRU\n(f) NFU\n(g) Envelhecimento",
+      resposta: "(a) FIFO (First In First Out)\nSubstitui a página que está há mais tempo na memória. Usa uma fila: quando uma página entra, vai para o final; quando precisa substituir, remove a do início. Simples, mas pode sofrer Anomalia de Belady.\n\n(b) Segunda Chance\nVariante do FIFO que dá uma 'segunda chance' às páginas. Ao escolher a vítima, verifica o bit R (referenciado). Se R=1, zera R e move para o final da fila. Se R=0, substitui. Melhora o FIFO consideravelmente.\n\n(c) Relógio (Clock)\nImplementação circular da Segunda Chance. Usa um ponteiro circular que percorre os frames. Em cada substituição, move o ponteiro até encontrar uma página com R=0. Se R=1, zera e continua. Mais eficiente que Segunda Chance.\n\n(d) NRU (Not Recently Used)\nClassifica páginas em 4 classes baseado nos bits R (referenciado) e M (modificado):\n- Classe 0: R=0, M=0 (não referenciada, não modificada)\n- Classe 1: R=0, M=1 (não referenciada, modificada)\n- Classe 2: R=1, M=0 (referenciada, não modificada)\n- Classe 3: R=1, M=1 (referenciada, modificada)\nSubstitui da classe mais baixa possível. Bits R são zerados periodicamente.\n\n(e) LRU (Least Recently Used)\nSubstitui a página que não foi usada há mais tempo. Requer manter timestamp ou contador de acesso para cada página. Ótimo desempenho, mas custoso de implementar (hardware ou software).\n\n(f) NFU (Not Frequently Used)\nMantém um contador para cada página que incrementa a cada referência. Substitui a página com menor contador. Simples, mas não 'envelhece' contadores (páginas antigas mantêm contador alto).\n\n(g) Envelhecimento (Aging)\nMelhoria do NFU. Mantém contador de 8 bits que é deslocado à direita periodicamente, com o bit R atual sendo adicionado à esquerda. Assim, contadores antigos perdem peso. Boa aproximação de LRU com custo menor."
     }
   ];
 
@@ -81,9 +95,9 @@ export default function ExerciciosPage() {
 
           <div className="grid grid-cols-3 gap-4 max-w-2xl">
             {[
-              { label: "Conceituais", value: "10" },
-              { label: "Cálculos", value: "8" },
-              { label: "Algoritmos", value: "7" }
+              { label: "Conceituais", value: "5" },
+              { label: "Cálculos", value: "1" },
+              { label: "Algoritmos", value: "1" }
             ].map((stat, i) => (
               <Card key={i} className="bg-white/5 backdrop-blur-sm border-blue-500/20 p-4 text-center">
                 <div className="text-3xl font-bold text-blue-400">{stat.value}</div>

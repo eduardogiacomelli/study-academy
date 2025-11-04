@@ -144,14 +144,14 @@ export default function VisualizacoesPage() {
                     <h4 className="font-semibold text-blue-400 mb-2">🔵 Temporal Locality</h4>
                     <p className="text-sm">
                       Quando a mesma página é acessada repetidamente em curto período. 
-                      Visible como "hot spots" estáveis no mapa.
+                      Visible como &quot;hot spots&quot; estáveis no mapa.
                     </p>
                   </div>
                   <div>
                     <h4 className="font-semibold text-green-400 mb-2">🟢 Spatial Locality</h4>
                     <p className="text-sm">
                       Quando páginas adjacentes são acessadas sequencialmente. 
-                      Visible como "trails" ou "streaks" no mapa.
+                      Visible como &quot;trails&quot; ou &quot;streaks&quot; no mapa.
                     </p>
                   </div>
                   <div>

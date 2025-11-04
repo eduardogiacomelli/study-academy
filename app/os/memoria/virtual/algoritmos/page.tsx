@@ -264,7 +264,7 @@ Queue: [B] → [C] → [D] → [E]`}
                         <ul className="space-y-1 text-sm text-slate-300">
                           <li>• <strong>Ignora frequência</strong> de uso</li>
                           <li>• <strong>Ignora recentidade</strong> de acesso</li>
-                          <li>• <strong>Belády's Anomaly</strong> (mais frames = mais PF!)</li>
+                          <li>• <strong>Belády&apos;s Anomaly</strong> (mais frames = mais PF!)</li>
                           <li>• <strong>Pior caso</strong>: remove página usada constantemente</li>
                         </ul>
                       </div>
@@ -464,7 +464,7 @@ int main() {
               <div className="space-y-3 text-sm text-slate-300">
                 <div className="bg-white/5 rounded p-3">
                   <div className="font-semibold text-indigo-400">László A. Belády (1966)</div>
-                  <div className="italic">"A Study of Replacement Algorithms for Virtual-Storage Computer"</div>
+                  <div className="italic">&quot;A Study of Replacement Algorithms for Virtual-Storage Computer&quot;</div>
                   <div className="text-xs text-slate-500">IBM Systems Journal, Vol. 5, No. 2</div>
                 </div>
               </div>

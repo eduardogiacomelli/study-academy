@@ -615,7 +615,27 @@ export default function SubstituicaoPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <BeladyAnomalyDemonstrator />
+        <Card className="p-6 bg-gradient-to-br from-red-500/10 to-orange-500/10 border-red-500/30">
+          <CardHeader>
+            <CardTitle className="text-2xl text-red-600 dark:text-red-400 flex items-center gap-2">
+              <AlertTriangle className="size-6" />
+              Anomalia de Belady
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-muted-foreground">
+              A anomalia de Belady é um fenômeno paradoxal onde aumentar o número de quadros pode causar 
+              MAIS page faults. Explore este conceito em detalhes:
+            </p>
+            <a 
+              href="/os/memoria/substituicao/belady-anomaly"
+              className="inline-flex items-center gap-2 text-primary hover:underline font-semibold"
+            >
+              Ver página completa sobre Anomalia de Belady →
+            </a>
+            <BeladyAnomalyDemonstrator />
+          </CardContent>
+        </Card>
       </motion.div>
 
       {/* Interactive Comparator */}

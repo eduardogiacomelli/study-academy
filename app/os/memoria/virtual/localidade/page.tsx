@@ -952,7 +952,7 @@ int main() {
               <div className="space-y-3 text-sm text-slate-300">
                 <div className="bg-white/5 rounded p-3">
                   <div className="font-semibold text-purple-400">Peter J. Denning (1968)</div>
-                  <div className="italic">"The Working Set Model for Program Behavior"</div>
+                  <div className="italic">&quot;The Working Set Model for Program Behavior&quot;</div>
                   <div className="text-xs text-slate-500">Communications of the ACM, Vol. 11, No. 5</div>
                   <div className="mt-2 text-xs">
                     🏆 Paper fundamental que definiu o modelo de Working Set
@@ -961,7 +961,7 @@ int main() {
                 
                 <div className="bg-white/5 rounded p-3">
                   <div className="font-semibold text-pink-400">Peter J. Denning (1980)</div>
-                  <div className="italic">"Working Sets Past and Present"</div>
+                  <div className="italic">&quot;Working Sets Past and Present&quot;</div>
                   <div className="text-xs text-slate-500">IEEE Transactions on Software Engineering</div>
                 </div>
               </div>

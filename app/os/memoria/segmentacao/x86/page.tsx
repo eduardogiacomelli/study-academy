@@ -479,7 +479,7 @@ gate.present = 1;
                 </div>
               </div>
               <div className="space-y-6">
-                <p className="text-lg">Sistemas operacionais modernos usam <strong>"Flat Model"</strong>: todos os segmentos cobrem todo o espaço de endereçamento, efetivamente desabilitando a segmentação.</p>
+                <p className="text-lg">Sistemas operacionais modernos usam <strong>&quot;Flat Model&quot;</strong>: todos os segmentos cobrem todo o espaço de endereçamento, efetivamente desabilitando a segmentação.</p>
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <Card className="p-6 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 border-blue-200">
@@ -547,11 +547,11 @@ static const struct gdt_page gdt_page = {
                 <h2 className="text-3xl font-bold">Referências Técnicas</h2>
               </div>
               <div className="space-y-3 text-sm">
-                <p>• <strong>Intel® 64 and IA-32 Architectures Software Developer's Manual</strong> - Volume 3A: System Programming Guide (Chapters 3-7)</p>
-                <p>• <strong>AMD64 Architecture Programmer's Manual</strong> - Volume 2: System Programming</p>
+                <p>• <strong>Intel® 64 and IA-32 Architectures Software Developer&apos;s Manual</strong> - Volume 3A: System Programming Guide (Chapters 3-7)</p>
+                <p>• <strong>AMD64 Architecture Programmer&apos;s Manual</strong> - Volume 2: System Programming</p>
                 <p>• <strong>Linux Kernel Source</strong> - <code className="bg-muted px-2 py-0.5 rounded text-xs">arch/x86/kernel/cpu/common.c</code></p>
                 <p>• <strong>OSDev Wiki</strong> - <a href="https://wiki.osdev.org/GDT" className="text-primary hover:underline">GDT Tutorial</a></p>
-                <p>• Tanenbaum - <em>"Modern Operating Systems"</em> (Chapter 3.3: Segmentation)</p>
+                <p>• Tanenbaum - <em>&quot;Modern Operating Systems&quot;</em> (Chapter 3.3: Segmentation)</p>
               </div>
             </Card>
           </motion.section>

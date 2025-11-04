@@ -228,8 +228,8 @@ export default function TeoriaVirtualMemory() {
               <div className="space-y-6">
                 <blockquote className="border-l-4 border-indigo-500 pl-6 py-4 bg-white/5 rounded-r-lg">
                   <p className="text-lg italic text-slate-300 mb-3">
-                    "The concept of virtual memory was one of the most important innovations in computer architecture, 
-                    fundamentally changing how we think about memory hierarchy."
+                    &quot;The concept of virtual memory was one of the most important innovations in computer architecture, 
+                    fundamentally changing how we think about memory hierarchy.&quot;
                   </p>
                   <cite className="text-indigo-400 font-semibold">
                     — Andrew S. Tanenbaum, Modern Operating Systems (2014)
@@ -238,8 +238,8 @@ export default function TeoriaVirtualMemory() {
 
                 <blockquote className="border-l-4 border-purple-500 pl-6 py-4 bg-white/5 rounded-r-lg">
                   <p className="text-lg italic text-slate-300 mb-3">
-                    "Virtual memory is to the operating system what garbage collection is to programming languages: 
-                    it frees the programmer from thinking about low-level resource management."
+                    &quot;Virtual memory is to the operating system what garbage collection is to programming languages: 
+                    it frees the programmer from thinking about low-level resource management.&quot;
                   </p>
                   <cite className="text-purple-400 font-semibold">
                     — Abraham Silberschatz, Operating System Concepts (2018)
@@ -248,8 +248,8 @@ export default function TeoriaVirtualMemory() {
 
                 <blockquote className="border-l-4 border-pink-500 pl-6 py-4 bg-white/5 rounded-r-lg">
                   <p className="text-lg italic text-slate-300 mb-3">
-                    "The working set model provides a theoretical foundation for understanding program behavior 
-                    and designing efficient paging policies."
+                    &quot;The working set model provides a theoretical foundation for understanding program behavior 
+                    and designing efficient paging policies.&quot;
                   </p>
                   <cite className="text-pink-400 font-semibold">
                     — Peter Denning, The Working Set Model (1968)
@@ -505,7 +505,7 @@ export default function TeoriaVirtualMemory() {
                   O MMU mantém uma <strong>Page Table</strong> que mapeia cada página virtual para um frame físico:
                 </p>
                 <div className="bg-black/30 rounded p-4 font-mono text-sm overflow-x-auto">
-                  <div className="text-green-400">// Conceitual (simplificado)</div>
+                  <div className="text-green-400">{'// Conceitual (simplificado)'}</div>
                   <div className="text-slate-300">
                     Página Virtual 0x00001000 → Frame Físico 0x5A300000<br />
                     Página Virtual 0x00002000 → Frame Físico 0x3B100000<br />
@@ -989,22 +989,22 @@ int main() {
               <div className="space-y-3 text-sm text-slate-300">
                 <div className="bg-white/5 rounded p-3">
                   <div className="font-semibold text-indigo-400">Denning, P. (1968)</div>
-                  <div className="italic">"The Working Set Model for Program Behavior"</div>
+                  <div className="italic">&quot;The Working Set Model for Program Behavior&quot;</div>
                   <div className="text-xs text-slate-500">CACM 11(5)</div>
                 </div>
                 <div className="bg-white/5 rounded p-3">
                   <div className="font-semibold text-purple-400">Belády, L.A. (1966)</div>
-                  <div className="italic">"A Study of Replacement Algorithms for Virtual-Storage"</div>
+                  <div className="italic">&quot;A Study of Replacement Algorithms for Virtual-Storage&quot;</div>
                   <div className="text-xs text-slate-500">IBM Systems Journal 5(2)</div>
                 </div>
                 <div className="bg-white/5 rounded p-3">
                   <div className="font-semibold text-pink-400">Kilburn et al. (1962)</div>
-                  <div className="italic">"One-Level Storage System"</div>
+                  <div className="italic">&quot;One-Level Storage System&quot;</div>
                   <div className="text-xs text-slate-500">IRE Transactions EC-11</div>
                 </div>
                 <div className="bg-white/5 rounded p-3">
                   <div className="font-semibold text-blue-400">McKusick et al. (1996)</div>
-                  <div className="italic">"Design and Implementation of the FreeBSD OS"</div>
+                  <div className="italic">&quot;Design and Implementation of the FreeBSD OS&quot;</div>
                   <div className="text-xs text-slate-500">Addison-Wesley</div>
                 </div>
               </div>
@@ -1016,12 +1016,12 @@ int main() {
             <div className="grid md:grid-cols-3 gap-4 text-sm text-slate-300">
               <div>
                 <div className="font-semibold text-indigo-400 mb-2">Intel</div>
-                <div>• Intel 64 and IA-32 Architectures Software Developer's Manual, Volume 3A</div>
+                <div>• Intel 64 and IA-32 Architectures Software Developer&apos;s Manual, Volume 3A</div>
                 <div className="text-xs text-slate-500 mt-1">Chapter 4: Paging</div>
               </div>
               <div>
                 <div className="font-semibold text-purple-400 mb-2">AMD</div>
-                <div>• AMD64 Architecture Programmer's Manual, Volume 2</div>
+                <div>• AMD64 Architecture Programmer&apos;s Manual, Volume 2</div>
                 <div className="text-xs text-slate-500 mt-1">System Programming</div>
               </div>
               <div>

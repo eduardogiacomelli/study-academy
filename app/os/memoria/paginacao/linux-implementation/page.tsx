@@ -160,7 +160,7 @@ export default function LinuxImplementationPage() {
                     
                     <CodeBlock
                       language="c"
-                      children={`// include/linux/mm_types.h
+                    >{`// include/linux/mm_types.h
 struct mm_struct {
     struct {
         // VMA (Virtual Memory Areas) do processo
@@ -239,8 +239,7 @@ int copy_mm(unsigned long clone_flags, struct task_struct *tsk) {
     
     tsk->mm = mm;
     return 0;
-}`}
-                    />
+}`}</CodeBlock>
                   </TabsContent>
 
                   <TabsContent value="vm_area" className="space-y-4">
@@ -253,7 +252,7 @@ int copy_mm(unsigned long clone_flags, struct task_struct *tsk) {
                     
                     <CodeBlock
                       language="c"
-                      children={`// include/linux/mm_types.h
+                    >{`// include/linux/mm_types.h
 struct vm_area_struct {
     // Início e fim do VMA (endereços virtuais)
     unsigned long vm_start;          // Endereço inicial (inclusivo)
@@ -325,8 +324,7 @@ struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr) {
     }
     
     return NULL;
-}`}
-                    />
+}`}</CodeBlock>
                   </TabsContent>
 
                   <TabsContent value="page" className="space-y-4">
@@ -339,7 +337,7 @@ struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr) {
                     
                     <CodeBlock
                       language="c"
-                      children={`// include/linux/mm_types.h
+                    >{`// include/linux/mm_types.h
 struct page {
     unsigned long flags;              // Flags de estado (PG_locked, PG_dirty, etc)
     
@@ -413,8 +411,7 @@ void put_page(struct page *page) {
     if (atomic_dec_and_test(&page->_refcount)) {
         __free_page(page);
     }
-}`}
-                    />
+}`}</CodeBlock>
                   </TabsContent>
                 </Tabs>
               </div>
@@ -449,7 +446,7 @@ void put_page(struct page *page) {
 
                 <CodeBlock
                   language="c"
-                  children={`// arch/x86/mm/fault.c
+                >{`// arch/x86/mm/fault.c
 void do_page_fault(struct pt_regs *regs, unsigned long error_code) {
     struct mm_struct *mm;
     struct vm_area_struct *vma;
@@ -571,8 +568,7 @@ enum {
     VM_FAULT_LOCKED     = 0x0020,  // Página já travada
     VM_FAULT_RETRY      = 0x0040,  // Tentar novamente
     VM_FAULT_FALLBACK   = 0x0080,  // Fallback para tamanho menor
-};`}
-                />
+};`}</CodeBlock>
               </div>
             </Card>
           </motion.section>

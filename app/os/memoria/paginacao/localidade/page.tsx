@@ -55,9 +55,9 @@ export default function LocalidadePage() {
   // Calcular working set (páginas únicas nos últimos N acessos)
   const workingSetWindow = 8;
   const workingSet = useMemo(() => {
-    if (accessPattern.length === 0) return new Set();
+    if (accessPattern.length === 0) return new Set<number>();
     const lastN = accessPattern.slice(-workingSetWindow);
-    return new Set(lastN);
+    return new Set<number>(lastN);
   }, [accessPattern]);
 
   return (
@@ -395,7 +395,7 @@ return z;         // Endereço 0x100C
                       <div className="p-4 rounded-lg bg-background border">
                         <h4 className="font-semibold mb-2">Working Set (Δ={workingSetWindow}):</h4>
                         <div className="flex flex-wrap gap-2">
-                          {Array.from(workingSet).sort((a, b) => a - b).map((page) => (
+                          {Array.from(workingSet).sort((a, b) => a - b).map((page: number) => (
                             <Badge key={page} className="bg-green-500/20 text-green-600">
                               {page}
                             </Badge>

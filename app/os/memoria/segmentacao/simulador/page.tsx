@@ -372,7 +372,7 @@ export default function SimuladorSegmentacaoPage() {
                   <li>1. Configure o tamanho da memória total</li>
                   <li>2. Crie segmentos com nome, tamanho e permissões (R/W/X)</li>
                   <li>3. Observe a fragmentação externa (blocos vermelhos)</li>
-                  <li>4. Use "Compactar" para eliminar fragmentação</li>
+                  <li>4. Use &quot;Compactar&quot; para eliminar fragmentação</li>
                   <li>5. Segmentos aparecem com animações suaves!</li>
                 </ul>
               </div>

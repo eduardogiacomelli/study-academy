@@ -714,8 +714,8 @@ Physical_Address = Segment_Table[seg_number].base + offset
                       </strong>
                     </p>
                     <ul className="text-sm space-y-1 text-muted-foreground">
-                      <li>• Tanenbaum - <em>"Modern Operating Systems"</em> (Cap. 3.3.2)</li>
-                      <li>• Silberschatz - <em>"Operating System Concepts"</em> (Cap. 9.2)</li>
+                      <li>• Tanenbaum - <em>&quot;Modern Operating Systems&quot;</em> (Cap. 3.3.2)</li>
+                      <li>• Silberschatz - <em>&quot;Operating System Concepts&quot;</em> (Cap. 9.2)</li>
                       <li>• PDF 02 - Paginação e Segmentação (Slides 35-40)</li>
                     </ul>
                   </div>

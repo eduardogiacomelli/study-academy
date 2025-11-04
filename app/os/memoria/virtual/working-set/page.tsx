@@ -164,11 +164,11 @@ Observação: Δ maior captura mais páginas, mas pode incluir páginas não nec
                     <div className="bg-black/30 rounded-lg p-4">
                       <h4 className="font-semibold text-purple-400 mb-2">Princípio Fundamental:</h4>
                       <div className="text-lg text-slate-300 italic border-l-4 border-purple-500 pl-4">
-                        "Um processo só deve ser executado se seu working set completo 
-                        estiver disponível na memória física."
+                        &quot;Um processo só deve ser executado se seu working set completo 
+                        estiver disponível na memória física.&quot;
                       </div>
                       <div className="text-sm text-slate-500 mt-2">
-                        — Peter Denning, "The Working Set Model for Program Behavior" (1968)
+                        — Peter Denning, &quot;The Working Set Model for Program Behavior&quot; (1968)
                       </div>
                     </div>
 
@@ -284,7 +284,7 @@ Se TRUE:
               <div className="space-y-3 text-sm text-slate-300">
                 <div className="bg-white/5 rounded p-3">
                   <div className="font-semibold text-purple-400">Peter J. Denning (1968)</div>
-                  <div className="italic">"The Working Set Model for Program Behavior"</div>
+                  <div className="italic">&quot;The Working Set Model for Program Behavior&quot;</div>
                   <div className="text-xs text-slate-500">Communications of the ACM, Vol. 11, No. 5</div>
                   <div className="mt-2 text-xs">
                     🏆 Paper seminal que definiu o modelo de Working Set

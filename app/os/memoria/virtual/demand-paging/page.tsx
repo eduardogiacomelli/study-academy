@@ -267,7 +267,7 @@ export default function DemandPaging() {
                   
                   <div className="bg-black/30 rounded-lg p-6 mb-4">
                     <div className="text-center text-lg text-slate-300 mb-4">
-                      "Never bring a page into memory until it is required."
+                      &quot;Never bring a page into memory until it is required.&quot;
                     </div>
                     <div className="text-center text-sm text-slate-500 italic">
                       — Silberschatz, Operating System Concepts

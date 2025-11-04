@@ -294,8 +294,8 @@ export default function CombinadoPage() {
                         </strong>
                       </p>
                       <ul className="text-sm space-y-1 text-muted-foreground">
-                        <li>• Tanenbaum - <em>"Modern Operating Systems"</em> (Cap. 3.3.4 - "Paged Segmentation")</li>
-                        <li>• Intel - <em>"IA-32 Architecture Manual"</em> (Vol. 3A, Cap. 3)</li>
+                        <li>• Tanenbaum - <em>&quot;Modern Operating Systems&quot;</em> (Cap. 3.3.4 - &quot;Paged Segmentation&quot;)</li>
+                        <li>• Intel - <em>&quot;IA-32 Architecture Manual&quot;</em> (Vol. 3A, Cap. 3)</li>
                         <li>• PDF 02 - Paginação e Segmentação (Slides 45-47)</li>
                       </ul>
                     </div>

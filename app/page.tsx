@@ -45,7 +45,7 @@ const features = [
   {
     icon: <Code2 className="size-6" />,
     title: "Código Real",
-    description: "Exemplos práticos em C, TypeScript e SQL",
+    description: "Exemplos práticos em C, TypeScript e C++",
     color: "from-purple-500 to-pink-500",
   },
   {

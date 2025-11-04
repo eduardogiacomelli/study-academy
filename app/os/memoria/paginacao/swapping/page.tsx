@@ -196,7 +196,7 @@ export default function SwappingPage() {
                         <li>Salva contexto (PCB, registradores)</li>
                         <li>Copia todo espaço de endereçamento para swap</li>
                         <li>Libera memória física</li>
-                        <li>Marca processo como "swapped out"</li>
+                        <li>Marca processo como &quot;swapped out&quot;</li>
                       </ol>
                       <div className="mt-4 p-3 bg-background/50 rounded text-xs">
                         <strong>Critério:</strong> Processo bloqueado em I/O, baixa prioridade, ou suspenso.
@@ -215,7 +215,7 @@ export default function SwappingPage() {
                         <li>Aloca memória física (pode swap out outro)</li>
                         <li>Copia todo espaço de endereçamento do swap</li>
                         <li>Restaura contexto (PCB, registradores)</li>
-                        <li>Marca processo como "pronto"</li>
+                        <li>Marca processo como &quot;pronto&quot;</li>
                       </ol>
                       <div className="mt-4 p-3 bg-background/50 rounded text-xs">
                         <strong>Trigger:</strong> I/O completou, alta prioridade, ou schedulado.

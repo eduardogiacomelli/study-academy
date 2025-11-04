@@ -114,7 +114,7 @@ export default function EstruturasDadosPage() {
                   <TabsContent value="typescript" className="space-y-4">
                     <CodeBlock
                       language="typescript"
-                      children={`// Estrutura básica da Tabela de Páginas
+                    >{`// Estrutura básica da Tabela de Páginas
 interface PageTableEntry {
   frameNumber: number;     // Número do quadro físico
   present: boolean;        // Página está na memória?
@@ -193,14 +193,13 @@ pageTable.map(0, 5);  // Página 0 → Quadro 5
 pageTable.map(1, 12); // Página 1 → Quadro 12
 
 const physicalAddr = pageTable.translate(512, 256); // offset 0 na página 2
-console.log(\`Endereço físico: \${physicalAddr}\`);`}
-                    />
+console.log(\`Endereço físico: \${physicalAddr}\`);`}</CodeBlock>
                   </TabsContent>
 
                   <TabsContent value="c" className="space-y-4">
                     <CodeBlock
                       language="c"
-                      children={`// page_table.h
+                    >{`// page_table.h
 #ifndef PAGE_TABLE_H
 #define PAGE_TABLE_H
 
@@ -335,8 +334,7 @@ int main() {
     
     page_table_destroy(pt);
     return 0;
-}`}
-                    />
+}`}</CodeBlock>
                   </TabsContent>
                 </Tabs>
               </div>
@@ -388,7 +386,7 @@ int main() {
                   <TabsContent value="typescript" className="space-y-4">
                     <CodeBlock
                       language="typescript"
-                      children={`class FrameBitmap {
+                    >{`class FrameBitmap {
   private bitmap: Uint32Array; // 32 bits por elemento
   private framesCount: number;
   
@@ -489,14 +487,13 @@ if (frame !== -1) {
 
 // Alocar 4 quadros contíguos
 const frames = bitmap.findContiguous(4);
-frames.forEach(f => bitmap.allocate(f));`}
-                    />
+frames.forEach(f => bitmap.allocate(f));`}</CodeBlock>
                   </TabsContent>
 
                   <TabsContent value="c" className="space-y-4">
                     <CodeBlock
                       language="c"
-                      children={`// frame_bitmap.h
+                    >{`// frame_bitmap.h
 #ifndef FRAME_BITMAP_H
 #define FRAME_BITMAP_H
 
@@ -625,8 +622,7 @@ int main() {
     
     frame_bitmap_destroy(fb);
     return 0;
-}`}
-                    />
+}`}</CodeBlock>
                   </TabsContent>
                 </Tabs>
               </div>
