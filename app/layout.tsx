@@ -11,7 +11,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "OS Academy - Plataforma Interativa de Sistemas Operacionais",
-  description: "Aprenda Sistemas Operacionais através de simuladores 3D, exercícios gamificados e visualizações interativas. 12 simuladores, 25+ exercícios validados academicamente.",
+  description:
+    "Aprenda Sistemas Operacionais através de simuladores 3D, exercícios gamificados e visualizações interativas. 12 simuladores, 25+ exercícios validados academicamente.",
 };
 
 export default function RootLayout({
@@ -20,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR" suppressHydrationWarning>
+    <html lang="pt-BR" suppressHydrationWarning className="dark">
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"

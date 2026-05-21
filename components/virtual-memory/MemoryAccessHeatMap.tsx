@@ -5,7 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, useRef } from "react";
 import { Play, Pause, RotateCcw, TrendingUp, Activity } from "lucide-react";
-import * as anime from "animejs";
 
 interface MemoryAccess {
   address: number;
@@ -21,7 +20,7 @@ export function MemoryAccessHeatMap() {
   const [accessPattern, setAccessPattern] = useState<'sequential' | 'random' | 'working-set'>('working-set');
   
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number>(0);
 
   const GRID_SIZE = 16; // 16x16 = 256 cells
   const CELL_SIZE = 30;

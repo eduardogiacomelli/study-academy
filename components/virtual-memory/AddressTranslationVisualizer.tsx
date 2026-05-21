@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect, useRef } from "react";
 import { ArrowRight, Cpu, Database, Layers, Zap } from "lucide-react";
-import * as anime from "animejs";
+import { animate } from "animejs";
 
 interface AddressParts {
   pml4: string;
@@ -95,12 +95,11 @@ export function AddressTranslationVisualizer() {
     if (visualizerRef.current && currentStep > 0) {
       const target = visualizerRef.current.querySelector(`.step-${currentStep}`);
       if (target) {
-        anime({
-          targets: target,
+        animate(target, {
           scale: [0.95, 1],
           opacity: [0.5, 1],
           duration: 400,
-          easing: "easeOutBack",
+          ease: "outBack",
         });
       }
     }

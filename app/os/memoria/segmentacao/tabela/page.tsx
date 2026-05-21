@@ -94,16 +94,16 @@ export default function TabelaSegmentosPage() {
     const tl = createTimeline();
 
     // Step 1: Highlight segment number
-    tl.add(animate(`#seg-${segmentId}`, {
+    tl.add(`#seg-${segmentId}`, {
       scale: [1, 1.15, 1],
       backgroundColor: ['#ffffff', '#3b82f6', '#ffffff'],
       duration: 600
-    }));
+    });
 
     await new Promise(resolve => setTimeout(resolve, 700));
 
     // Step 2: Access table entry
-    tl.add(animate(`#entry-${segmentId}`, {
+    tl.add(`#entry-${segmentId}`, {
       scale: [1, 1.08, 1],
       boxShadow: [
         '0 0 0 0 rgba(59, 130, 246, 0)',
@@ -111,7 +111,7 @@ export default function TabelaSegmentosPage() {
         '0 0 0 0 rgba(59, 130, 246, 0)'
       ],
       duration: 800
-    }));
+    });
 
     await new Promise(resolve => setTimeout(resolve, 900));
 

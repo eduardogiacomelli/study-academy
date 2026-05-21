@@ -317,15 +317,12 @@ function ConnectionLines({ pageTable, virtualPages, physicalFrames }: {
 
 function Line({ start, end }: { start: THREE.Vector3; end: THREE.Vector3 }) {
   const points = useMemo(() => [start, end], [start, end]);
-  const geometry = useMemo(() => {
+  const obj = useMemo(() => {
     const geom = new THREE.BufferGeometry().setFromPoints(points);
-    return geom;
+    const mat = new THREE.LineBasicMaterial({ color: "#8b5cf6", opacity: 0.4, transparent: true });
+    return new THREE.Line(geom, mat);
   }, [points]);
 
-  return (
-    <line geometry={geometry}>
-      <lineBasicMaterial color="#8b5cf6" opacity={0.4} transparent linewidth={2} />
-    </line>
-  );
+  return <primitive object={obj} />;
 }
 

@@ -706,13 +706,13 @@ export default function SubstituicaoPage() {
                     <p>5: [5,1,2] FAULT (LRU: 4)</p>
                     <p>1: [5,1,2] HIT</p>
                     <p>2: [5,1,2] HIT</p>
-                    <p>3: [5,3,2] FAULT (LRU: 1)</p>
-                    <p>4: [5,3,4] FAULT (LRU: 2)</p>
-                    <p>5: [5,3,4] HIT</p>
+                    <p>3: [3,1,2] FAULT (LRU: 5 — última acesso em t=7)</p>
+                    <p>4: [3,4,2] FAULT (LRU: 1)</p>
+                    <p>5: [3,4,5] FAULT (LRU: 2)</p>
                   </div>
-                  <p className="text-blue-400 mt-2"><strong>LRU: 9 page faults</strong></p>
+                  <p className="text-blue-400 mt-2"><strong>LRU: 10 page faults</strong></p>
                 </div>
-                <p className="text-yellow-400">Neste caso específico, FIFO e LRU têm o mesmo resultado!</p>
+                <p className="text-yellow-400">Curiosidade: nesta string FIFO (9) bate LRU (10) — LRU nem sempre é melhor que FIFO!</p>
               </div>
             </details>
           </div>

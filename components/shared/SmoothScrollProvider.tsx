@@ -24,7 +24,6 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
       gestureOrientation: "vertical" as const,
       smoothWheel: true,
       wheelMultiplier: 1,
-      smoothTouch: false, // Desabilitar em touch para melhor performance mobile
       touchMultiplier: 2,
       infinite: false,
     });

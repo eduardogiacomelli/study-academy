@@ -516,8 +516,8 @@ bad_area:
     mmap_read_unlock(mm);
     
 bad_area_access:
-    // Enviar SIGSEGV para o processo
-    do_sigbus(regs, error_code, address);
+    // Enviar SIGSEGV para o processo (acesso a endereço inválido)
+    force_sig_fault(SIGSEGV, SEGV_MAPERR, (void __user *)address);
 }
 
 // mm/memory.c - Handler genérico de page fault

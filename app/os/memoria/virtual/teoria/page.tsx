@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CodeBlock } from "@/components/shared/CodeBlock";
 import { useEffect, useRef, useState } from "react";
-import * as anime from "animejs";
+import { animate, stagger } from "animejs";
 import { BookOpen, Cpu, Database, History, Layers, Zap, Code2, Award } from "lucide-react";
 
 export default function TeoriaVirtualMemory() {
@@ -14,13 +14,12 @@ export default function TeoriaVirtualMemory() {
 
   useEffect(() => {
     if (timelineRef.current) {
-      anime({
-        targets: timelineRef.current.querySelectorAll(".timeline-item"),
+      animate(timelineRef.current.querySelectorAll(".timeline-item"), {
         translateX: [-50, 0],
         opacity: [0, 1],
-        delay: anime.stagger(100),
+        delay: stagger(100),
         duration: 800,
-        easing: "easeOutExpo",
+        ease: "outExpo",
       });
     }
   }, []);

@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Copy, Users, Zap, Save } from "lucide-react";
-import * as anime from "animejs";
+import { animate } from "animejs";
 
 interface Process {
   pid: number;
@@ -56,12 +56,11 @@ export function CopyOnWriteVisualizer3D() {
     setMemorySaved(16);
     
     // Animate
-    anime({
-      targets: '.child-process',
+    animate('.child-process', {
       translateY: [50, 0],
       opacity: [0, 1],
       duration: 800,
-      easing: 'easeOutExpo'
+      ease: 'outExpo',
     });
   };
 
@@ -121,11 +120,10 @@ export function CopyOnWriteVisualizer3D() {
     }, 100);
     
     // Animate copy
-    anime({
-      targets: `.page-${pageId}`,
+    animate(`.page-${pageId}`, {
       scale: [1, 1.2, 1],
       duration: 500,
-      easing: 'easeInOutQuad'
+      ease: 'inOutQuad',
     });
   };
 

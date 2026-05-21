@@ -172,14 +172,14 @@ export default function BeladyAnomalyPage() {
                           { ref: 2, frames: [1, 2, null], fault: true },
                           { ref: 3, frames: [1, 2, 3], fault: true },
                           { ref: 4, frames: [4, 2, 3], fault: true },
-                          { ref: 1, frames: [4, 2, 3], fault: true },
-                          { ref: 2, frames: [4, 2, 3], fault: false },
-                          { ref: 5, frames: [4, 5, 3], fault: true },
-                          { ref: 1, frames: [4, 5, 1], fault: true },
-                          { ref: 2, frames: [2, 5, 1], fault: true },
-                          { ref: 3, frames: [2, 3, 1], fault: true },
-                          { ref: 4, frames: [2, 3, 4], fault: true },
-                          { ref: 5, frames: [5, 3, 4], fault: true },
+                          { ref: 1, frames: [4, 1, 3], fault: true },
+                          { ref: 2, frames: [4, 1, 2], fault: true },
+                          { ref: 5, frames: [5, 1, 2], fault: true },
+                          { ref: 1, frames: [5, 1, 2], fault: false },
+                          { ref: 2, frames: [5, 1, 2], fault: false },
+                          { ref: 3, frames: [5, 3, 2], fault: true },
+                          { ref: 4, frames: [5, 3, 4], fault: true },
+                          { ref: 5, frames: [5, 3, 4], fault: false },
                         ].map((step, i) => (
                           <tr key={i} className="border-b border-orange-200/50 dark:border-orange-800/50">
                             <td className="p-2 font-mono font-bold">{step.ref}</td>
@@ -339,9 +339,7 @@ export default function BeladyAnomalyPage() {
                     </h4>
                     <ul className="space-y-2 text-sm text-green-800 dark:text-green-200">
                       <li>• <strong>LRU (Least Recently Used)</strong> - Nunca sofre anomalia</li>
-                      <li>• <strong>Optimal (Belady)</strong> - Teórico, nunca sofre</li>
-                      <li>• <strong>LFU (Least Frequently Used)</strong> - Com implementação correta</li>
-                      <li>• <strong>MRU (Most Recently Used)</strong> - Raro, mas possui stack</li>
+                      <li>• <strong>Optimal (OPT)</strong> - Teórico, nunca sofre</li>
                     </ul>
                   </div>
 
